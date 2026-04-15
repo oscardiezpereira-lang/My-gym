@@ -6,25 +6,267 @@
 <title>OSCAR — Entrenador Personal</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
-  :root {
-    --red: #e63946;
-    --dark: #0d0d0d;
-    --dark2: #161616;
-    --dark3: #1f1f1f;
-    --dark4: #2a2a2a;
-    --gold: #f4a261;
-    --green: #52b788;
-    --blue: #4cc9f0;
-    --text: #e8e8e8;
-    --muted: #888;
-    --border: #2a2a2a;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  header { background: var(--dark2); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--red); }
-  .logo span { color: var(--text); }
-  .header-info { display: flex; align-items: center; gap: 20px; font-size: 13px; color: var(--muted); }
-  .weight-badge​​​​​​​​​​​​​​​​
+  :root{--red:#e63946;--dark:#0d0d0d;--dark2:#161616;--dark3:#1f1f1f;--dark4:#2a2a2a;--gold:#f4a261;--green:#52b788;--blue:#4cc9f0;--text:#e8e8e8;--muted:#888;--border:#2a2a2a}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+  header{background:var(--dark2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--red)}
+  .logo span{color:var(--text)}
+  .header-info{display:flex;align-items:center;gap:20px;font-size:13px;color:var(--muted)}
+  .weight-badge{background:var(--dark3);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace;font-size:12px;color:var(--gold)}
+  .tabs{display:flex;background:var(--dark2);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
+  .tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--red);border-bottom-color:var(--red)}
+  main{max-width:860px;margin:0 auto;padding:28px 20px}
+  .section{display:none}
+  .section.active{display:block}
+  .card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+  .card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .day-badge{background:var(--red);color:white;font-family:'DM Mono',monospace;font-size:11px;padding:3px 8px;border-radius:4px;font-weight:500}
+  .routine-table{width:100%;border-collapse:collapse;font-size:13px}
+  .routine-table th{text-align:left;padding:8px 10px;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+  .routine-table td{padding:10px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+  .routine-table tr:last-child td{border-bottom:none}
+  .routine-table tr:hover td{background:var(--dark3)}
+  .new-badge{background:rgba(244,162,97,0.15);border:1px solid rgba(244,162,97,0.3);color:var(--gold);font-size:10px;padding:2px 6px;border-radius:3px;margin-left:6px;font-family:'DM Mono',monospace}
+  .weight-cell{font-family:'DM Mono',monospace;font-size:13px;color:var(--blue);font-weight:500}
+  .cardio-bar{background:linear-gradient(90deg,rgba(76,201,240,0.08),rgba(76,201,240,0.03));border:1px solid rgba(76,201,240,0.2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13px;color:var(--blue)}
+  .log-form{display:flex;flex-direction:column;gap:14px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase}
+  select,input[type="number"],input[type="date"]{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;width:100%;-webkit-appearance:none}
+  select:focus,input:focus{border-color:var(--red)}
+  select option{background:var(--dark3)}
+  .btn{background:var(--red);color:white;border:none;padding:12px 24px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;width:100%}
+  .btn:hover{background:#c1121f}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 16px;border-radius:6px;cursor:pointer}
+  .btn-outline:hover{border-color:var(--red);color:var(--red)}
+  .exercise-block{background:var(--dark3);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+  .exercise-block-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--dark4);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:4px}
+  .exercise-meta{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+  .series-rows{padding:8px 12px;display:flex;flex-direction:column;gap:6px}
+  .series-row{display:grid;grid-template-columns:28px 1fr 1fr;gap:8px;align-items:center}
+  .series-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:600;text-align:center}
+  .series-row .input-col input{background:var(--dark);border:1px solid #333;border-radius:6px;padding:7px 8px;text-align:center;font-size:14px;font-family:'DM Mono',monospace;color:var(--text);width:100%;outline:none}
+  .series-row .input-col input:focus{border-color:var(--red)}
+  .input-label-small{font-size:10px;color:var(--muted);text-align:center;margin-top:2px}
+  .input-col{display:flex;flex-direction:column}
+  .exercise-name-log{font-size:13px;color:var(--text);font-weight:500}
+  .progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+  .stat-card{background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .stat-label{font-size:11px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px}
+  .stat-value{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--text);line-height:1}
+  .stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .history-entry{background:var(--dark3);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .history-day{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px}
+  .history-date{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
+  .pr-badge{background:rgba(82,183,136,0.15);border:1px solid rgba(82,183,136,0.3);color:var(--green);font-size:10px;padding:1px 5px;border-radius:3px;margin-left:6px;font-family:'DM Mono',monospace}
+  .coach-card{background:linear-gradient(135deg,var(--dark2) 0%,#1a0a0a 100%);border:1px solid rgba(230,57,70,0.3);border-radius:12px;padding:24px;margin-bottom:16px}
+  .coach-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--red);margin-bottom:12px}
+  .coach-msg{font-size:14px;line-height:1.7;color:var(--text)}
+  .coach-tip{background:var(--dark3);border-left:3px solid var(--red);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.6;color:#ccc;margin-top:12px}
+  .prog-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+  .prog-table th{padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid var(--border)}
+  .prog-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;font-size:13px}
+  .prog-table tr:last-child td{border-bottom:none}
+  .arrow-up{color:var(--green);font-size:12px}
+  .arrow-same{color:var(--muted);font-size:12px}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:4px}
+  .day-cell{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 6px;text-align:center;font-size:11px}
+  .day-cell .day-name{color:var(--muted);font-size:10px;text-transform:uppercase;margin-bottom:6px}
+  .day-cell .day-content{font-weight:600;font-size:11px;line-height:1.4}
+  .day-gym{color:var(--red);border-color:rgba(230,57,70,0.2)}
+  .day-padel{color:var(--blue);border-color:rgba(76,201,240,0.2)}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#0d1b14;padding:12px 20px;border-radius:8px;font-weight:600;font-size:14px;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999}
+  .toast.show{transform:translateY(0);opacity:1}
+  .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
+  .empty-icon{font-size:48px;margin-bottom:12px}
+  .empty-text{font-size:14px;line-height:1.6}
+  .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px}
+  .divider{height:1px;background:var(--border);margin:20px 0}
+  textarea{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;min-height:70px;transition:border-color 0.2s}
+  textarea:focus{border-color:var(--red)}
+  .feeling-row{display:flex;gap:8px;flex-wrap:wrap}
+  .feeling-btn{background:var(--dark3);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.15s}
+  .feeling-btn.selected{border-color:var(--red);color:var(--text);background:rgba(230,57,70,0.1)}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s}
+  .modal-overlay.show{opacity:1;pointer-events:all}
+  .modal-box{background:var(--dark2);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:28px 24px 40px;transform:translateY(60px);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1)}
+  .modal-overlay.show .modal-box{transform:translateY(0)}
+  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px}
+  .modal-subtitle{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:'DM Mono',monospace}
+  .feedback-section{margin-bottom:18px}
+  .feedback-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600}
+  .feedback-msg{font-size:14px;line-height:1.7;color:var(--text);background:var(--dark3);border-radius:10px;padding:14px 16px}
+  .upgrade-row{display:flex;align-items:center;justify-content:space-between;background:var(--dark3);border-radius:8px;padding:10px 14px;margin-bottom:6px;gap:8px}
+  .upgrade-ex{font-size:13px;font-weight:500;flex:1}
+  .upgrade-now{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+  .upgrade-arrow{color:var(--green);font-size:14px;margin:0 6px}
+  .upgrade-next{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:1px}
+  .upgrade-reason{font-size:11px;color:var(--muted);margin-top:2px}
+  .modal-close{width:100%;margin-top:20px;background:var(--red);color:white;border:none;padding:14px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer}
+  .feeling-tag{display:inline-block;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.25);color:var(--red);font-size:12px;padding:3px 10px;border-radius:20px;margin-bottom:16px}
+  @media(max-width:600px){.form-row{grid-template-columns:1fr}.week-grid{grid-template-columns:repeat(4,1fr)}.progress-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">OSCAR <span>/ ENTRENA</span></div>
+  <div class="header-info">
+    <div id="saveIndicator" style="font-size:12px;font-family:'DM Mono',monospace;transition:color 0.3s"></div>
+    <div class="weight-badge">91 kg → 80 kg</div>
+    <div style="font-size:12px" id="sessionCount">0 sesiones</div>
+  </div>
+</header>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('routine')">📋 Rutina</div>
+  <div class="tab" onclick="showTab('log')">➕ Registrar</div>
+  <div class="tab" onclick="showTab('progress')">📈 Progreso</div>
+  <div class="tab" onclick="showTab('history')">🗂️ Historial</div>
+  <div class="tab" onclick="showTab('coach')">🎯 Coach</div>
+  <div class="tab" onclick="showTab('backup')">💾 Datos</div>
+</div>
+<main>
+<div id="section-routine" class="section active">
+  <div class="section-header"><div class="section-title">TU RUTINA</div></div>
+  <div id="routineContent"></div>
+  <div class="card">
+    <div class="card-title">📅 DISTRIBUCIÓN SEMANAL</div>
+    <div class="week-grid">
+      <div class="day-cell day-gym"><div class="day-name">LUN</div><div class="day-content">Torso A</div></div>
+      <div class="day-cell day-padel"><div class="day-name">MAR</div><div class="day-content">🎾 Pádel</div></div>
+      <div class="day-cell day-gym"><div class="day-name">MIÉ</div><div class="day-content">Pierna A</div></div>
+      <div class="day-cell day-padel"><div class="day-name">JUE</div><div class="day-content">🎾 Pádel</div></div>
+      <div class="day-cell day-gym"><div class="day-name">VIE</div><div class="day-content">Torso B</div></div>
+      <div class="day-cell day-gym"><div class="day-name">SÁB</div><div class="day-content">Pierna B</div></div>
+      <div class="day-cell day-padel"><div class="day-name">DOM</div><div class="day-content">🎾 / 😴</div></div>
+    </div>
+  </div>
+</div>
+<div id="section-log" class="section">
+  <div class="section-header"><div class="section-title">REGISTRAR SESIÓN</div></div>
+  <div class="card">
+    <div class="log-form">
+      <div class="form-row">
+        <div class="form-group"><label>Fecha</label><input type="date" id="logDate"></div>
+        <div class="form-group">
+          <label>Día</label>
+          <select id="logDay" onchange="renderExerciseInputs()">
+            <option value="">Selecciona...</option>
+            <option value="1">Día 1 — Torso A</option>
+            <option value="2">Día 2 — Pierna A</option>
+            <option value="3">Día 3 — Torso B</option>
+            <option value="4">Día 4 — Pierna B</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>¿Cómo te has sentido?</label>
+        <div class="feeling-row">
+          <button class="feeling-btn" onclick="selectFeeling(this,'💀 Destruido')">💀 Destruido</button>
+          <button class="feeling-btn" onclick="selectFeeling(this,'😓 Cansado')">😓 Cansado</button>
+          <button class="feeling-btn" onclick="selectFeeling(this,'😐 Normal')">😐 Normal</button>
+          <button class="feeling-btn" onclick="selectFeeling(this,'💪 Fuerte')">💪 Fuerte</button>
+          <button class="feeling-btn" onclick="selectFeeling(this,'🔥 Bestial')">🔥 Bestial</button>
+        </div>
+      </div>
+      <div id="exerciseInputsContainer" style="display:none">
+        <div class="divider"></div>
+        <label style="margin-bottom:10px;display:block">Pesos (kg)</label>
+        <div id="exerciseInputs"></div>
+      </div>
+      <div class="form-group"><label>Notas</label><textarea id="logNotes" placeholder="Ej: Me costó el press banca..."></textarea></div>
+      <button class="btn" onclick="saveSession()">GUARDAR SESIÓN</button>
+    </div>
+  </div>
+</div>
+<div id="section-progress" class="section">
+  <div class="section-header"><div class="section-title">MI PROGRESO</div></div>
+  <div id="progressContent"></div>
+</div>
+<div id="section-history" class="section">
+  <div class="section-header"><div class="section-title">HISTORIAL</div></div>
+  <div id="historyContent"></div>
+</div>
+<div id="section-coach" class="section">
+  <div class="section-header"><div class="section-title">🎯 TU ENTRENADOR</div></div>
+  <div id="coachContent"></div>
+</div>
+<div id="section-backup" class="section">
+  <div class="section-header"><div class="section-title">💾 MIS DATOS</div></div>
+  <div class="card">
+    <div class="card-title">📤 EXPORTAR</div>
+    <button class="btn" onclick="exportData()" style="background:var(--green)">📋 VER Y COPIAR MIS DATOS</button>
+    <div id="exportBox" style="display:none;margin-top:14px">
+      <textarea id="exportText" readonly style="height:140px;font-size:11px;font-family:'DM Mono',monospace;background:var(--dark);color:var(--muted)"></textarea>
+      <button class="btn" onclick="copyExport()" style="margin-top:8px">📋 COPIAR</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📥 IMPORTAR</div>
+    <textarea id="importText" placeholder="Pega aquí tu JSON..." style="height:140px;font-size:11px;font-family:'DM Mono',monospace;background:var(--dark);color:var(--muted);margin-bottom:10px;outline:none"></textarea>
+    <button class="btn" onclick="importFromText()">⬆️ IMPORTAR DATOS</button>
+  </div>
+  <div class="card">
+    <div class="card-title">📊 ESTADO</div>
+    <div id="storageStatus" style="font-size:13px;color:var(--muted)">Comprobando...</div>
+  </div>
+  <div class="card" style="border-color:rgba(230,57,70,0.3)">
+    <div class="card-title" style="color:var(--red)">⚠️ ZONA PELIGROSA</div>
+    <button class="btn" onclick="clearAllData()" style="background:#333;color:var(--red);border:1px solid var(--red);font-size:14px">BORRAR TODO</button>
+  </div>
+</div>
+<div class="modal-overlay" id="feedbackModal" onclick="closeFeedbackModal(event)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="feedbackContent"></div>
+    <button class="modal-close" onclick="document.getElementById('feedbackModal').classList.remove('show')">CERRAR</button>
+  </div>
+</div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const DAYS={'1':{name:'Torso A',exercises:[{id:'press_banca',name:'Press banca plano',baseline:60,series:4,repsHint:'5–6',rest:'3 min'},{id:'remo_t',name:'Remo máquina T',baseline:30,series:3,repsHint:'8–10',rest:'2 min'},{id:'press_inclinado',name:'Press inclinado mancuernas',baseline:67.5,series:3,repsHint:'8–12',rest:'2 min'},{id:'jalon_pecho',name:'Jalón al pecho',baseline:60,series:3,repsHint:'8–12',rest:'2 min'},{id:'curl_scott',name:'Curl Scott barra Z',baseline:20,series:3,repsHint:'8–12',rest:'90 s'},{id:'curl_alterno',name:'Curl alterno mancuernas',baseline:20,series:3,repsHint:'10–15',rest:'90 s'},{id:'plancha_peso',name:'Plancha con peso',baseline:null,series:3,repsHint:'30–45s',rest:'60 s'}]},'2':{name:'Pierna A',exercises:[{id:'incline_squat',name:'Incline Squat (máquina)',baseline:80,series:4,repsHint:'5–6',rest:'3 min'},{id:'peso_muerto',name:'Peso muerto convencional',baseline:80,series:4,repsHint:'4–5',rest:'3 min'},{id:'prensa',name:'Prensa inclinada',baseline:140,series:3,repsHint:'8–10',rest:'2 min'},{id:'aductor',name:'Aductor máquina',baseline:null,series:3,repsHint:'12–15',rest:'90 s'},{id:'abduccion',name:'Abducción cadera',baseline:null,series:3,repsHint:'12–15',rest:'90 s'},{id:'dead_bug',name:'Dead Bug',baseline:null,series:3,repsHint:'8–10',rest:'60 s'}]},'3':{name:'Torso B',exercises:[{id:'remo_polea',name:'Remo polea baja',baseline:70,series:3,repsHint:'8–10',rest:'2 min'},{id:'jalon_abierto',name:'Jalón abierto',baseline:70,series:3,repsHint:'8–10',rest:'2 min'},{id:'press_declinado',name:'Press declinado',baseline:60,series:3,repsHint:'8–10',rest:'2 min'},{id:'ext_triceps',name:'Extensión tríceps cabeza',baseline:50,series:3,repsHint:'10–12',rest:'90 s'},{id:'face_pull',name:'Face pull',baseline:22.5,series:3,repsHint:'12–15',rest:'90 s'},{id:'pallof',name:'Pallof Press',baseline:null,series:3,repsHint:'10/lado',rest:'60 s'}]},'4':{name:'Pierna B',exercises:[{id:'sentadilla_libre',name:'Sentadilla libre',baseline:null,series:4,repsHint:'6–8',rest:'3 min'},{id:'rdl',name:'Peso muerto rumano',baseline:80,series:3,repsHint:'6–8',rest:'2 min'},{id:'prensa_d4',name:'Prensa inclinada',baseline:110,series:3,repsHint:'8–10',rest:'2 min'},{id:'ext_cuadriceps',name:'Extensión cuádriceps',baseline:70,series:3,repsHint:'10–12',rest:'90 s'},{id:'curl_femoral',name:'Curl femoral tumbado',baseline:42.5,series:3,repsHint:'8–10',rest:'90 s'}]}};
+const STORAGE_KEY='oscar_sessions';
+const REP_RANGES={press_banca:[5,6],remo_t:[8,10],press_inclinado:[8,12],jalon_pecho:[8,12],curl_scott:[8,12],curl_alterno:[10,15],plancha_peso:[30,45],incline_squat:[5,6],peso_muerto:[4,5],prensa:[8,10],aductor:[12,15],abduccion:[12,15],dead_bug:[8,10],remo_polea:[8,10],jalon_abierto:[8,10],press_declinado:[8,10],ext_triceps:[10,12],face_pull:[12,15],pallof:[10,10],sentadilla_libre:[6,8],rdl:[6,8],prensa_d4:[8,10],ext_cuadriceps:[10,12],curl_femoral:[8,10]};
+const WEIGHT_JUMPS={press_banca:2.5,remo_t:2.5,press_inclinado:2.5,jalon_pecho:2.5,curl_scott:2.5,curl_alterno:2,plancha_peso:2.5,incline_squat:5,peso_muerto:5,prensa:10,aductor:2.5,abduccion:2.5,dead_bug:0,remo_polea:2.5,jalon_abierto:2.5,press_declinado:2.5,ext_triceps:2.5,face_pull:2.5,pallof:2.5,sentadilla_libre:5,rdl:5,prensa_d4:10,ext_cuadriceps:2.5,curl_femoral:2.5};
+const DAY_SUBTITLES={'1':'Empuje · Tirón · Bíceps','2':'Cuádriceps · Core · Aductores','3':'Tirón · Empuje · Tríceps · Core','4':'Cadera · Glúteo · Isquios'};
+const DAY_NAMES_LABEL={'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
+let sessions=[],selectedFeeling='';
+async function storageGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+async function storageSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){throw new Error('No se pudo guardar: '+e.message);}}
+async function loadData(){try{const s=await storageGet(STORAGE_KEY);if(s&&Array.isArray(s))sessions=s;}catch(e){}updateHeader();renderRoutine();if(sessions.length===0){sessions=[{"day":"4","dayName":"Pierna B","date":"2026-04-15","feeling":"💪 Fuerte","notes":"Registrado por el entrenador","id":1744718400000,"exercises":[{"id":"sentadilla_libre","name":"Sentadilla libre","sets":[{"weight":50,"reps":8},{"weight":60,"reps":8},{"weight":60,"reps":8},{"weight":60,"reps":8}],"weight":60,"baseline":null},{"id":"rdl","name":"Peso muerto rumano","sets":[{"weight":80,"reps":8},{"weight":80,"reps":8},{"weight":80,"reps":8}],"weight":80,"baseline":80},{"id":"prensa_d4","name":"Prensa inclinada","sets":[{"weight":140,"reps":10},{"weight":140,"reps":10},{"weight":140,"reps":10}],"weight":140,"baseline":110},{"id":"ext_cuadriceps","name":"Extensión cuádriceps","sets":[{"weight":70,"reps":12},{"weight":70,"reps":12},{"weight":70,"reps":12}],"weight":70,"baseline":70},{"id":"curl_femoral","name":"Curl femoral tumbado","sets":[{"weight":42.5,"reps":10},{"weight":42.5,"reps":10},{"weight":42.5,"reps":9}],"weight":42.5,"baseline":42.5}]}];await storageSet(STORAGE_KEY,sessions);updateHeader();renderRoutine();}}
+async function saveData(){setSaveIndicator('saving');try{await storageSet(STORAGE_KEY,sessions);setSaveIndicator('ok');return true;}catch(e){setSaveIndicator('error');showToast('❌ Error: '+e.message,'#e63946');return false;}}
+function setSaveIndicator(s){const el=document.getElementById('saveIndicator');if(!el)return;const st={saving:{text:'💾 Guardando...',color:'var(--gold)'},ok:{text:'✅ Guardado',color:'var(--green)'},error:{text:'❌ Error',color:'var(--red)'},idle:{text:'',color:'transparent'}};const d=st[s]||st.idle;el.textContent=d.text;el.style.color=d.color;if(s==='ok')setTimeout(()=>setSaveIndicator('idle'),3000);}
+function updateHeader(){document.getElementById('sessionCount').textContent=sessions.length+' sesiones';}
+function showTab(name){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('section-'+name).classList.add('active');event.target.classList.add('active');if(name==='routine')renderRoutine();if(name==='progress')renderProgress();if(name==='history')renderHistory();if(name==='coach')renderCoach();if(name==='backup')renderStorageStatus();}
+function selectFeeling(btn,v){document.querySelectorAll('.feeling-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedFeeling=v;}
+function renderExerciseInputs(){const day=document.getElementById('logDay').value;const c=document.getElementById('exerciseInputsContainer');const inp=document.getElementById('exerciseInputs');if(!day){c.style.display='none';return;}c.style.display='block';const d=DAYS[day];inp.innerHTML=d.exercises.map(ex=>{const n=ex.series||3;const rows=Array.from({length:n},(_,i)=>`<div class="series-row"><div class="series-num">S${i+1}</div><div class="input-col"><input type="number" id="ex_${ex.id}_s${i}" placeholder="${ex.baseline||'—'}" step="0.5" min="0"><div class="input-label-small">KG</div></div><div class="input-col"><input type="number" id="reps_${ex.id}_s${i}" placeholder="reps" step="1" min="0"><div class="input-label-small">REPS</div></div></div>`).join('');return`<div class="exercise-block"><div class="exercise-block-header"><span class="exercise-name-log">${ex.name}</span><span class="exercise-meta">${n} series · ${ex.repsHint} · ${ex.rest}</span></div><div class="series-rows">${rows}</div></div>`;}).join('');}
+async function saveSession(){const day=document.getElementById('logDay').value;const date=document.getElementById('logDate').value;const notes=document.getElementById('logNotes').value;if(!day||!date){showToast('⚠️ Selecciona fecha y día','#e63946');return;}const d=DAYS[day];const exercises=d.exercises.map(ex=>{const n=ex.series||3;const sets=Array.from({length:n},(_,i)=>({weight:parseFloat(document.getElementById(`ex_${ex.id}_s${i}`)?.value)||null,reps:parseInt(document.getElementById(`reps_${ex.id}_s${i}`)?.value)||null}));const w=sets.map(s=>s.weight).filter(Boolean);return{id:ex.id,name:ex.name,sets,weight:w.length?Math.max(...w):null,baseline:ex.baseline};});const session={day,dayName:d.name,date,feeling:selectedFeeling,notes,exercises,id:Date.now()};sessions.unshift(session);const saved=await saveData();if(!saved){sessions.shift();return;}updateHeader();renderRoutine();showFeedbackModal(session,d);document.getElementById('logDay').value='';document.getElementById('logNotes').value='';document.getElementById('exerciseInputsContainer').style.display='none';document.querySelectorAll('.feeling-btn').forEach(b=>b.classList.remove('selected'));selectedFeeling='';}
+function getPersonalBests(){const p={};sessions.forEach(s=>s.exercises.forEach(ex=>{if(ex.weight&&(!p[ex.id]||ex.weight>p[ex.id]))p[ex.id]=ex.weight;}));return p;}
+function getLastWeightForExercise(id){for(const s of sessions){const ex=s.exercises.find(e=>e.id===id);if(ex){if(ex.sets){const w=ex.sets.map(s=>s.weight).filter(Boolean);if(w.length)return Math.max(...w);}if(ex.weight)return ex.weight;}}return null;}
+function getSuggestedWeight(ex,lw){if(!lw)return null;const j=WEIGHT_JUMPS[ex.id];if(!j)return null;const r=REP_RANGES[ex.id];if(!r)return null;for(const s of sessions){const f=s.exercises.find(e=>e.id===ex.id);if(!f)continue;if(f.sets&&f.sets.length){const vs=f.sets.filter(s=>s.weight===lw&&s.reps);if(!vs.length)continue;const at=vs.filter(s=>s.reps>=r[1]);if(at.length>=Math.ceil(vs.length*0.66))return lw+j;}break;}return null;}
+function renderRoutine(){const c=document.getElementById('routineContent');if(!c)return;c.innerHTML=Object.entries(DAYS).map(([dn,dd])=>{const rows=dd.exercises.map(ex=>{const lw=getLastWeightForExercise(ex.id);const sg=getSuggestedWeight(ex,lw);let lc=lw!==null?`<span style="color:var(--blue);font-family:'DM Mono',monospace">${lw} kg</span>`:ex.baseline!==null?`<span style="color:var(--muted);font-family:'DM Mono',monospace">${ex.baseline} kg</span>`:'—';let nc=sg?`<span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700;font-size:14px">↑ ${sg} kg</span>`:lw!==null?`<span style="color:var(--muted);font-family:'DM Mono',monospace">${lw} kg</span>`:ex.baseline!==null?`<span style="color:var(--muted);font-family:'DM Mono',monospace">${ex.baseline} kg</span>`:'<span style="color:#444">—</span>';return`<tr><td style="font-size:13px">${ex.name}</td><td style="text-align:center">${ex.series}</td><td style="text-align:center;color:var(--muted)">${ex.repsHint}</td><td style="text-align:center">${lc}</td><td style="text-align:center">${nc}</td></tr>`;}).join('');return`<div class="card"><div class="card-title" style="margin-bottom:4px"><span class="day-badge">DÍA ${dn}</span> ${DAY_NAMES_LABEL[dn]} <span style="font-size:11px;color:var(--muted);font-weight:400"> — ${DAY_SUBTITLES[dn]}</span></div><table class="routine-table"><tr><th style="width:40%">Ejercicio</th><th style="text-align:center">Series</th><th style="text-align:center">Reps</th><th style="text-align:center;color:var(--blue)">Último</th><th style="text-align:center;color:var(--green)">Próximo</th></tr>${rows}</table><div class="cardio-bar">🚴 LISS Bicicleta — 22 min — FC ~125 ppm</div></div>`;}).join('');}
+function renderProgress(){const c=document.getElementById('progressContent');const p=getPersonalBests();const ls=sessions[0];const kx=[{id:'press_banca',name:'Press banca plano',base:60},{id:'press_inclinado',name:'Press inclinado',base:67.5},{id:'incline_squat',name:'Incline Squat',base:80},{id:'peso_muerto',name:'Peso muerto',base:80},{id:'prensa',name:'Prensa Pierna A',base:140},{id:'rdl',name:'RDL',base:80},{id:'prensa_d4',name:'Prensa Pierna B',base:110},{id:'ext_cuadriceps',name:'Ext cuádriceps',base:70},{id:'curl_femoral',name:'Curl femoral',base:42.5},{id:'curl_scott',name:'Curl Scott',base:20}];c.innerHTML=`<div class="progress-grid"><div class="stat-card"><div class="stat-label">Sesiones</div><div class="stat-value">${sessions.length}</div><div class="stat-sub">totales</div></div><div class="stat-card"><div class="stat-label">Última sesión</div><div class="stat-value" style="font-size:22px">${ls?formatDate(ls.date):'—'}</div><div class="stat-sub">${ls?'Día '+ls.day+' — '+ls.dayName:'Sin sesiones'}</div></div></div><div class="card"><div class="card-title">🏆 RECORDS PERSONALES</div><table class="prog-table"><tr><th>Ejercicio</th><th>Base</th><th>Mejor</th><th>Mejora</th><th>Próximo</th></tr>${kx.map(ex=>{const pb=p[ex.id]||ex.base;const d=pb-ex.base;return`<tr><td>${ex.name}</td><td style="font-family:'DM Mono',monospace;color:var(--muted)">${ex.base}kg</td><td style="font-family:'DM Mono',monospace;color:var(--blue);font-weight:600">${pb}kg</td><td>${d>0?`<span class="arrow-up">▲ +${d}kg</span>`:'<span class="arrow-same">— base</span>'}</td><td style="font-family:'DM Mono',monospace;color:var(--gold)">${pb+2.5}kg</td></tr>`;}).join('')}</table></div>`;}
+function renderHistory(){const c=document.getElementById('historyContent');if(!sessions.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Sin sesiones aún.</div></div>';return;}c.innerHTML=sessions.map(s=>{const blocks=s.exercises.map(ex=>{let sh='';if(ex.sets&&ex.sets.length){const pills=ex.sets.map((set,i)=>{const kg=set.weight?`${set.weight}kg`:'—';const rp=set.reps?`×${set.reps}`:'';const hd=set.weight||set.reps;return`<span style="display:inline-block;background:${hd?'var(--dark)':'#1a1a1a'};border:1px solid ${hd?'#333':'#222'};border-radius:5px;padding:3px 8px;font-family:'DM Mono',monospace;font-size:11px;color:${hd?'var(--blue)':'#333'};margin:2px 3px 2px 0"><span style="color:#444;font-size:10px">S${i+1} </span>${kg}${rp}</span>`;}).join('');sh=`<div style="margin-top:5px;line-height:1.8">${pills}</div>`;}else if(ex.weight){sh=`<div style="margin-top:4px;font-family:'DM Mono',monospace;font-size:12px;color:var(--blue)">${ex.weight}kg</div>`;}else{sh=`<div style="margin-top:4px;font-size:12px;color:#333">—</div>`;}return`<div style="padding:10px 12px;border-bottom:1px solid #1a1a1a"><span style="font-size:13px;font-weight:500;color:var(--text)">${ex.name}</span>${sh}</div>`;}).join('');return`<div class="history-entry"><div style="padding:14px 16px;background:var(--dark4);display:flex;justify-content:space-between;align-items:center"><div><div class="history-day">Día ${s.day} — ${s.dayName}</div><div class="history-date">${formatDate(s.date)}${s.feeling?' · '+s.feeling:''}</div></div><div style="font-size:12px;color:var(--muted)">${s.exercises.length} ejercicios</div></div>${blocks}${s.notes?`<div style="padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic">💬 ${s.notes}</div>`:''}</div>`;}).join('');}
+function renderCoach(){const c=document.getElementById('coachContent');const p=getPersonalBests();const t=sessions.length;const adv=[{ex:'Press banca plano',id:'press_banca',base:60,tip:'Sube 2,5 kg cuando hagas 6 reps limpias en las 4 series.'},{ex:'Press inclinado',id:'press_inclinado',base:67.5,tip:'Sube 2,5 kg cuando domines 12 reps en todas las series.'},{ex:'Incline Squat',id:'incline_squat',base:80,tip:'Sube 5 kg cuando el último rep salga limpio.'},{ex:'Prensa Pierna A',id:'prensa',base:140,tip:'Sube 10 kg — la prensa aguanta progresos más rápidos.'},{ex:'Peso muerto',id:'peso_muerto',base:80,tip:'Sube 5 kg cada 2 semanas con técnica sólida.'}];c.innerHTML=`<div class="coach-card"><div class="coach-title">💬 MENSAJE DEL ENTRENADOR</div><div class="coach-msg">${t===0?'Registra tu primer entreno para empezar el seguimiento.':`Llevas ${t} sesión${t>1?'es':''} registrada${t>1?'s':''}. Tu objetivo: <strong>91 kg → 80 kg sin perder músculo</strong>. Proteína mínima 175 g/día, déficit 300-400 kcal.`}</div></div><div class="card"><div class="card-title">📊 PROGRESIÓN</div>${adv.map(a=>`<div class="coach-tip"><strong style="color:var(--text)">${a.ex} — ${p[a.id]||a.base} kg</strong><br>${a.tip}</div>`).join('')}</div><div class="card"><div class="card-title">🎾 PÁDEL + GYM</div><div class="coach-tip">Con 3+ partidos semanales, prioriza los compuestos (sentadilla, peso muerto). Si el rendimiento baja 2 semanas seguidas, haz semana de descarga: -40% peso, 2-3 series.</div></div>`;}
+function analyzeSession(session){const up=[],wa=[],hi=[];sessions.slice(1).length;session.exercises.forEach(ex=>{const r=REP_RANGES[ex.id];if(!r||!ex.sets)return;const vs=ex.sets.filter(s=>s.weight&&s.reps);if(!vs.length)return;const mxR=r[1],mnR=r[0],w=vs[0].weight,j=WEIGHT_JUMPS[ex.id]||2.5;const pb=sessions.slice(1).reduce((m,s)=>{const e=s.exercises.find(e=>e.id===ex.id);return e&&e.weight?Math.max(m,e.weight):m;},0);if(w>pb&&pb>0)hi.push({name:ex.name,weight:w});const aT=vs.every(s=>s.reps>=mxR);const mT=vs.filter(s=>s.reps>=mxR).length>=Math.ceil(vs.length*0.66);if((aT||mT)&&j>0)up.push({name:ex.name,currentWeight:w,nextWeight:w+j,reason:aT?`${vs.length}/${vs.length} series al máximo`:'Mayoría al tope'});if(vs.length>=3){const f=vs[0].reps,l=vs[vs.length-1].reps;if(f-l>=3&&l<mnR)wa.push({name:ex.name,weight:w});}});return{upgrades:up,warnings:wa,highlights:hi};}
+function generateCoachMessage(session,analysis){const{upgrades:up,warnings:wa,highlights:hi}=analysis;const f=session.feeling||'';let tone='normal';if(f.includes('Bestial')||f.includes('Fuerte'))tone='fire';if(f.includes('Destruido')||f.includes('Cansado'))tone='tired';const msgs={fire:['🔥 Así se entrena. '+session.dayName+' completado con energía brutal.','Bestia. Días como este construyen el músculo de verdad.'],tired:['💪 Lo completaste aunque no estabas fino — eso es lo que distingue a los que progresan.','Los días duros también cuentan. Descansa, come proteína.'],normal:['Sólido. '+session.dayName+' en el bote.','Consistencia es la clave. Otra sesión más hacia los 80 kg.']};let msg=msgs[tone][Math.floor(Math.random()*msgs[tone].length)];if(hi.length)msg+='\n\n🏆 PR en '+hi.map(h=>h.name+' ('+h.weight+'kg)').join(', ')+'.';if(wa.length)msg+='\n\n⚠️ En '+wa.map(w=>w.name).join(', ')+' bajaste mucho de reps. Descansa más entre series.';return msg;}
+function showFeedbackModal(session,dayData){const an=analyzeSession(session);const msg=generateCoachMessage(session,an);const{upgrades:up}=an;const ft=session.feeling?`<span class="feeling-tag">${session.feeling}</span>`:'';const bk=JSON.stringify(sessions);document.getElementById('feedbackContent').innerHTML=`<div class="modal-title">Día ${session.day} — ${session.dayName}</div><div class="modal-subtitle">${formatDate(session.date)}</div>${ft}<div class="feedback-section"><div class="feedback-label">💬 Tu entrenador</div><div class="feedback-msg">${msg.replace(/\n/g,'<br>')}</div></div>${up.length?`<div class="feedback-section"><div class="feedback-label">📈 Subidas recomendadas</div>${up.map(u=>`<div class="upgrade-row"><div><div class="upgrade-ex">${u.name}</div><div class="upgrade-reason">${u.reason}</div></div><div style="display:flex;align-items:center;gap:4px"><span class="upgrade-now">${u.currentWeight}kg</span><span class="upgrade-arrow">→</span><span class="upgrade-next">${u.nextWeight}kg</span></div></div>`).join('')}</div>`:''}<div style="margin-top:16px;background:rgba(230,57,70,0.06);border:1px solid rgba(230,57,70,0.2);border-radius:10px;padding:14px"><div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:8px">💾 COPIA DE SEGURIDAD</div><textarea id="quickBackupText" readonly style="width:100%;height:80px;font-size:10px;font-family:'DM Mono',monospace;background:var(--dark);color:#666;border:1px solid #333;border-radius:6px;padding:8px;resize:none">${bk}</textarea><button onclick="quickCopyBackup()" style="width:100%;margin-top:8px;background:var(--red);color:white;border:none;padding:10px;border-radius:7px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer">📋 COPIAR BACKUP</button></div>`;document.getElementById('feedbackModal').classList.add('show');}
+function quickCopyBackup(){const ta=document.getElementById('quickBackupText');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ta.value).then(()=>showToast('✅ Copiado')).catch(()=>{ta.select();ta.setSelectionRange(0,99999);document.execCommand('copy');showToast('✅ Copiado');});}else{ta.select();ta.setSelectionRange(0,99999);document.execCommand('copy');showToast('✅ Copiado');}}
+function closeFeedbackModal(e){if(e.target===document.getElementById('feedbackModal'))document.getElementById('feedbackModal').classList.remove('show');}
+function exportData(){const j=JSON.stringify(sessions,null,2);const b=document.getElementById('exportBox');const ta=document.getElementById('exportText');ta.value=j;b.style.display='block';ta.scrollIntoView({behavior:'smooth',block:'center'});showToast('✅ Datos listos');}
+function copyExport(){const ta=document.getElementById('exportText');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ta.value).then(()=>showToast('✅ Copiado')).catch(()=>{ta.select();ta.setSelectionRange(0,99999);document.execCommand('copy');showToast('✅ Copiado');});}else{ta.select();ta.setSelectionRange(0,99999);document.execCommand('copy');showToast('✅ Copiado');}}
+async function importFromText(){const raw=document.getElementById('importText').value.trim();if(!raw){showToast('⚠️ Pega el JSON primero','#f4a261');return;}let imp=null;try{const p=JSON.parse(raw);imp=Array.isArray(p)?p:p&&Array.isArray(p.sessions)?p.sessions:null;if(!imp)throw new Error('Formato inválido');}catch(e){showToast('❌ Error: '+e.message,'#e63946');return;}sessions=imp;const ok=await saveData();if(ok){document.getElementById('importText').value='';updateHeader();renderRoutine();showToast(`✅ ${sessions.length} sesiones recuperadas`);renderStorageStatus();}}
+async function clearAllData(){if(!confirm('¿Borrar todas las sesiones? No se puede deshacer.'))return;sessions=[];await saveData();try{localStorage.removeItem(STORAGE_KEY);}catch{}updateHeader();showToast('🗑️ Datos borrados');renderStorageStatus();}
+async function renderStorageStatus(){const el=document.getElementById('storageStatus');if(!el)return;let st='❌ No disponible';try{const l=localStorage.getItem(STORAGE_KEY);st=l?`✅ OK — ${JSON.parse(l).length} sesiones`:'⚠️ Vacío';}catch(e){st='❌ Error';}el.innerHTML=`<div style="display:flex;justify-content:space-between"><span>💾 Local</span><span style="color:var(--text)">${st}</span></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span>🏋️ En memoria</span><span style="color:var(--text)">${sessions.length} sesiones</span></div>`;}
+function formatDate(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`;}
+function showToast(msg,color='#52b788'){const t=document.getElementById('toast');t.style.background=color;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+document.addEventListener('DOMContentLoaded',async()=>{document.getElementById('logDate').valueAsDate=new Date();await loadData();});
+</script>
+</body>
+</html>
