@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 
 <html lang="es">
 <head>
@@ -10,13 +10,14 @@
   :root{--red:#e63946;--dark:#0d0d0d;--dark2:#161616;--dark3:#1f1f1f;--dark4:#2a2a2a;--gold:#f4a261;--green:#52b788;--blue:#4cc9f0;--text:#e8e8e8;--muted:#888;--border:#2a2a2a}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+  #errorBox{display:none;background:#3a0a0a;border:2px solid var(--red);color:#ffaaaa;padding:14px 18px;margin:10px;border-radius:8px;font-family:monospace;font-size:12px;white-space:pre-wrap;word-break:break-word}
   header{background:var(--dark2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
   .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--red)}
   .logo span{color:var(--text)}
   .header-info{display:flex;align-items:center;gap:20px;font-size:13px;color:var(--muted)}
   .weight-badge{background:var(--dark3);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace;font-size:12px;color:var(--gold)}
   .tabs{display:flex;background:var(--dark2);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
-  .tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s}
+  .tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;-webkit-tap-highlight-color:rgba(230,57,70,0.2)}
   .tab:hover{color:var(--text)}
   .tab.active{color:var(--red);border-bottom-color:var(--red)}
   main{max-width:860px;margin:0 auto;padding:28px 20px}
@@ -29,7 +30,6 @@
   .routine-table th{text-align:left;padding:8px 6px;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:0.6px;text-transform:uppercase;border-bottom:1px solid var(--border)}
   .routine-table td{padding:10px 6px;border-bottom:1px solid #1a1a1a;vertical-align:middle;font-size:12px}
   .routine-table tr:last-child td{border-bottom:none}
-  .routine-table tr:hover td{background:var(--dark3)}
   .target-pill{display:inline-block;padding:3px 8px;border-radius:5px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600}
   .target-up{background:rgba(82,183,136,0.15);border:1px solid rgba(82,183,136,0.4);color:var(--green)}
   .target-hold{background:rgba(244,162,97,0.12);border:1px solid rgba(244,162,97,0.3);color:var(--gold)}
@@ -41,13 +41,11 @@
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .form-group{display:flex;flex-direction:column;gap:6px}
   label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase}
-  select,input[type="number"],input[type="date"]{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;width:100%;-webkit-appearance:none}
+  select,input[type="number"],input[type="date"]{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;width:100%;-webkit-appearance:none}
   select:focus,input:focus{border-color:var(--red)}
-  select option{background:var(--dark3)}
-  .btn{background:var(--red);color:white;border:none;padding:12px 24px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;width:100%}
+  .btn{background:var(--red);color:white;border:none;padding:12px 24px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;width:100%;-webkit-tap-highlight-color:rgba(255,255,255,0.2)}
   .btn:hover{background:#c1121f}
-  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 16px;border-radius:6px;cursor:pointer}
-  .btn-outline:hover{border-color:var(--red);color:var(--red)}
+  .btn:active{transform:scale(0.98)}
   .exercise-block{background:var(--dark3);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
   .exercise-block-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--dark4);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:4px}
   .exercise-meta{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
@@ -56,7 +54,6 @@
   .series-row{display:grid;grid-template-columns:28px 1fr 1fr;gap:8px;align-items:center}
   .series-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);font-weight:600;text-align:center}
   .series-row .input-col input{background:var(--dark);border:1px solid #333;border-radius:6px;padding:7px 8px;text-align:center;font-size:14px;font-family:'DM Mono',monospace;color:var(--text);width:100%;outline:none}
-  .series-row .input-col input:focus{border-color:var(--red)}
   .input-label-small{font-size:10px;color:var(--muted);text-align:center;margin-top:2px}
   .input-col{display:flex;flex-direction:column}
   .exercise-name-log{font-size:13px;color:var(--text);font-weight:500}
@@ -68,7 +65,6 @@
   .history-entry{background:var(--dark3);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
   .history-day{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px}
   .history-date{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
-  .pr-badge{background:rgba(82,183,136,0.15);border:1px solid rgba(82,183,136,0.3);color:var(--green);font-size:10px;padding:1px 5px;border-radius:3px;margin-left:6px;font-family:'DM Mono',monospace}
   .coach-card{background:linear-gradient(135deg,var(--dark2) 0%,#1a0a0a 100%);border:1px solid rgba(230,57,70,0.3);border-radius:12px;padding:24px;margin-bottom:16px}
   .coach-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--red);margin-bottom:12px}
   .coach-msg{font-size:14px;line-height:1.7;color:var(--text)}
@@ -76,7 +72,6 @@
   .prog-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
   .prog-table th{padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid var(--border)}
   .prog-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;font-size:13px}
-  .prog-table tr:last-child td{border-bottom:none}
   .arrow-up{color:var(--green);font-size:12px}
   .arrow-same{color:var(--muted);font-size:12px}
   .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:4px}
@@ -85,66 +80,42 @@
   .day-cell .day-content{font-weight:600;font-size:11px;line-height:1.4}
   .day-gym{color:var(--red);border-color:rgba(230,57,70,0.2)}
   .day-padel{color:var(--blue);border-color:rgba(76,201,240,0.2)}
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#0d1b14;padding:12px 20px;border-radius:8px;font-weight:600;font-size:14px;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#0d1b14;padding:12px 20px;border-radius:8px;font-weight:600;font-size:14px;transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:999}
   .toast.show{transform:translateY(0);opacity:1}
   .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
-  .empty-icon{font-size:48px;margin-bottom:12px}
-  .empty-text{font-size:14px;line-height:1.6}
   .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
   .section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px}
   .divider{height:1px;background:var(--border);margin:20px 0}
-  textarea{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;min-height:70px;transition:border-color 0.2s}
-  textarea:focus{border-color:var(--red)}
+  textarea{background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;min-height:70px}
   .feeling-row{display:flex;gap:8px;flex-wrap:wrap}
-  .feeling-btn{background:var(--dark3);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.15s}
+  .feeling-btn{background:var(--dark3);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer}
   .feeling-btn.selected{border-color:var(--red);color:var(--text);background:rgba(230,57,70,0.1)}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s}
-  .modal-overlay.show{opacity:1;pointer-events:all}
-  .modal-box{background:var(--dark2);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:28px 24px 40px;transform:translateY(60px);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1)}
-  .modal-overlay.show .modal-box{transform:translateY(0)}
-  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
-  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px}
-  .modal-subtitle{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:'DM Mono',monospace}
-  .feedback-section{margin-bottom:18px}
-  .feedback-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600}
-  .feedback-msg{font-size:14px;line-height:1.7;color:var(--text);background:var(--dark3);border-radius:10px;padding:14px 16px}
-  .upgrade-row{display:flex;align-items:center;justify-content:space-between;background:var(--dark3);border-radius:8px;padding:10px 14px;margin-bottom:6px;gap:8px}
-  .upgrade-ex{font-size:13px;font-weight:500;flex:1}
-  .upgrade-now{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
-  .upgrade-arrow{color:var(--green);font-size:14px;margin:0 6px}
-  .upgrade-next{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:1px}
-  .upgrade-reason{font-size:11px;color:var(--muted);margin-top:2px}
-  .modal-close{width:100%;margin-top:20px;background:var(--red);color:white;border:none;padding:14px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer}
-  .feeling-tag{display:inline-block;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.25);color:var(--red);font-size:12px;padding:3px 10px;border-radius:20px;margin-bottom:16px}
-  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:10px}
-  .legend-item{display:flex;align-items:center;gap:4px;color:var(--muted)}
-  .legend-dot{width:8px;height:8px;border-radius:2px}
   @media(max-width:600px){.form-row{grid-template-columns:1fr}.week-grid{grid-template-columns:repeat(4,1fr)}.progress-grid{grid-template-columns:repeat(2,1fr)}.routine-table th,.routine-table td{padding:8px 4px;font-size:11px}}
 </style>
 </head>
 <body>
+<div id="errorBox"></div>
 <header>
   <div class="logo">OSCAR <span>/ ENTRENA</span></div>
   <div class="header-info">
-    <div id="saveIndicator" style="font-size:12px;font-family:'DM Mono',monospace;transition:color 0.3s"></div>
-    <div class="weight-badge">91 kg → 80 kg</div>
+    <div class="weight-badge">91 → 80 kg</div>
     <div style="font-size:12px" id="sessionCount">0 sesiones</div>
   </div>
 </header>
-<div class="tabs">
-  <div class="tab active" onclick="showTab('routine')">📋 Rutina</div>
-  <div class="tab" onclick="showTab('log')">➕ Registrar</div>
-  <div class="tab" onclick="showTab('progress')">📈 Progreso</div>
-  <div class="tab" onclick="showTab('history')">🗂️ Historial</div>
-  <div class="tab" onclick="showTab('coach')">🎯 Coach</div>
-  <div class="tab" onclick="showTab('backup')">💾 Datos</div>
+<div class="tabs" id="tabsContainer">
+  <div class="tab active" data-section="routine">📋 Rutina</div>
+  <div class="tab" data-section="log">➕ Registrar</div>
+  <div class="tab" data-section="progress">📈 Progreso</div>
+  <div class="tab" data-section="history">🗂️ Historial</div>
+  <div class="tab" data-section="coach">🎯 Coach</div>
+  <div class="tab" data-section="backup">💾 Datos</div>
 </div>
 <main>
 <div id="section-routine" class="section active">
   <div class="section-header"><div class="section-title">TU RUTINA</div></div>
   <div id="routineContent"></div>
   <div class="card">
-    <div class="card-title">📅 DISTRIBUCIÓN SEMANAL</div>
+    <div class="card-title">📅 SEMANAL</div>
     <div class="week-grid">
       <div class="day-cell day-gym"><div class="day-name">LUN</div><div class="day-content">Torso A</div></div>
       <div class="day-cell day-padel"><div class="day-name">MAR</div><div class="day-content">🎾 Pádel</div></div>
@@ -156,12 +127,12 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">🎯 CÓMO LEER EL "PRÓXIMO"</div>
+    <div class="card-title">🎯 LEYENDA</div>
     <div style="font-size:12px;line-height:1.7;color:var(--muted)">
-      <div style="margin-bottom:8px"><span class="target-pill target-up">↑ SUBIR</span> &nbsp; Has cumplido el objetivo 2+ sesiones. Sube peso y empieza por el rep mínimo.</div>
-      <div style="margin-bottom:8px"><span class="target-pill target-push">→ EMPUJAR</span> &nbsp; Mantén el peso y sube reps hasta llegar al tope del rango.</div>
-      <div style="margin-bottom:8px"><span class="target-pill target-hold">= MANTENER</span> &nbsp; Repite peso y reps. Estancado o vienes cansado.</div>
-      <div><span class="target-pill target-deload">↓ BAJAR</span> &nbsp; Has retrocedido o llevas 3+ semanas atascado. Baja peso 5-10% y reconstruye.</div>
+      <div style="margin-bottom:8px"><span class="target-pill target-up">↑ SUBIR</span> &nbsp; Has cumplido el objetivo 2+ sesiones. Sube peso, empieza por rep mínimo.</div>
+      <div style="margin-bottom:8px"><span class="target-pill target-push">→ EMPUJAR</span> &nbsp; Mantén el peso y sube reps hasta el tope.</div>
+      <div style="margin-bottom:8px"><span class="target-pill target-hold">= MANTENER</span> &nbsp; Repite. Cansado, retroceso, o aún no consolidas.</div>
+      <div><span class="target-pill target-deload">↓ BAJAR</span> &nbsp; 3+ sesiones atascado. Baja peso 5-10%.</div>
     </div>
   </div>
 </div>
@@ -173,7 +144,7 @@
         <div class="form-group"><label>Fecha</label><input type="date" id="logDate"></div>
         <div class="form-group">
           <label>Día</label>
-          <select id="logDay" onchange="renderExerciseInputs()">
+          <select id="logDay">
             <option value="">Selecciona...</option>
             <option value="1">Día 1 — Torso A</option>
             <option value="2">Día 2 — Pierna A</option>
@@ -184,12 +155,12 @@
       </div>
       <div class="form-group">
         <label>¿Cómo te has sentido?</label>
-        <div class="feeling-row">
-          <button class="feeling-btn" onclick="selectFeeling(this,'💀 Destruido')">💀 Destruido</button>
-          <button class="feeling-btn" onclick="selectFeeling(this,'😓 Cansado')">😓 Cansado</button>
-          <button class="feeling-btn" onclick="selectFeeling(this,'😐 Normal')">😐 Normal</button>
-          <button class="feeling-btn" onclick="selectFeeling(this,'💪 Fuerte')">💪 Fuerte</button>
-          <button class="feeling-btn" onclick="selectFeeling(this,'🔥 Bestial')">🔥 Bestial</button>
+        <div class="feeling-row" id="feelingRow">
+          <button type="button" class="feeling-btn" data-feeling="💀 Destruido">💀 Destruido</button>
+          <button type="button" class="feeling-btn" data-feeling="😓 Cansado">😓 Cansado</button>
+          <button type="button" class="feeling-btn" data-feeling="😐 Normal">😐 Normal</button>
+          <button type="button" class="feeling-btn" data-feeling="💪 Fuerte">💪 Fuerte</button>
+          <button type="button" class="feeling-btn" data-feeling="🔥 Bestial">🔥 Bestial</button>
         </div>
       </div>
       <div id="exerciseInputsContainer" style="display:none">
@@ -197,8 +168,8 @@
         <label style="margin-bottom:10px;display:block">Pesos (kg) y reps</label>
         <div id="exerciseInputs"></div>
       </div>
-      <div class="form-group"><label>Notas</label><textarea id="logNotes" placeholder="Ej: Me costó el press banca..."></textarea></div>
-      <button class="btn" onclick="saveSession()">GUARDAR SESIÓN</button>
+      <div class="form-group"><label>Notas</label><textarea id="logNotes" placeholder="Notas..."></textarea></div>
+      <button type="button" class="btn" id="saveSessionBtn">GUARDAR SESIÓN</button>
     </div>
   </div>
 </div>
@@ -211,377 +182,565 @@
   <div id="historyContent"></div>
 </div>
 <div id="section-coach" class="section">
-  <div class="section-header"><div class="section-title">🎯 TU ENTRENADOR</div></div>
+  <div class="section-header"><div class="section-title">🎯 COACH</div></div>
   <div id="coachContent"></div>
 </div>
 <div id="section-backup" class="section">
-  <div class="section-header"><div class="section-title">💾 MIS DATOS</div></div>
+  <div class="section-header"><div class="section-title">💾 DATOS</div></div>
   <div class="card">
     <div class="card-title">📤 EXPORTAR</div>
-    <button class="btn" onclick="exportData()" style="background:var(--green)">📋 VER Y COPIAR MIS DATOS</button>
+    <button type="button" class="btn" id="exportBtn" style="background:var(--green)">📋 VER MIS DATOS</button>
     <div id="exportBox" style="display:none;margin-top:14px">
-      <textarea id="exportText" readonly style="height:140px;font-size:11px;font-family:'DM Mono',monospace;background:var(--dark);color:var(--muted)"></textarea>
-      <button class="btn" onclick="copyExport()" style="margin-top:8px">📋 COPIAR</button>
+      <textarea id="exportText" readonly style="height:140px;font-size:11px;font-family:monospace;background:var(--dark);color:var(--muted)"></textarea>
+      <button type="button" class="btn" id="copyExportBtn" style="margin-top:8px">📋 COPIAR</button>
     </div>
   </div>
   <div class="card">
     <div class="card-title">📥 IMPORTAR</div>
-    <textarea id="importText" placeholder="Pega aquí tu JSON..." style="height:140px;font-size:11px;font-family:'DM Mono',monospace;background:var(--dark);color:var(--muted);margin-bottom:10px;outline:none"></textarea>
-    <button class="btn" onclick="importFromText()">⬆️ IMPORTAR DATOS</button>
+    <textarea id="importText" placeholder="Pega aquí tu JSON..." style="height:140px;font-size:11px;font-family:monospace;background:var(--dark);color:var(--muted);margin-bottom:10px"></textarea>
+    <button type="button" class="btn" id="importBtn">⬆️ IMPORTAR</button>
   </div>
   <div class="card">
     <div class="card-title">📊 ESTADO</div>
-    <div id="storageStatus" style="font-size:13px;color:var(--muted)">Comprobando...</div>
+    <div id="storageStatus" style="font-size:13px;color:var(--muted)">—</div>
   </div>
   <div class="card" style="border-color:rgba(230,57,70,0.3)">
     <div class="card-title" style="color:var(--red)">⚠️ ZONA PELIGROSA</div>
-    <button class="btn" onclick="clearAllData()" style="background:#333;color:var(--red);border:1px solid var(--red);font-size:14px">BORRAR TODO</button>
-  </div>
-</div>
-<div class="modal-overlay" id="feedbackModal" onclick="closeFeedbackModal(event)">
-  <div class="modal-box">
-    <div class="modal-handle"></div>
-    <div id="feedbackContent"></div>
-    <button class="modal-close" onclick="document.getElementById('feedbackModal').classList.remove('show')">CERRAR</button>
+    <button type="button" class="btn" id="clearBtn" style="background:#333;color:var(--red);border:1px solid var(--red);font-size:14px">BORRAR TODO</button>
   </div>
 </div>
 </main>
 <div class="toast" id="toast"></div>
+
 <script>
-const DAYS={'1':{name:'Torso A',exercises:[{id:'press_banca',name:'Press banca plano',baseline:60,series:4,repsMin:5,repsMax:6,rest:'3 min'},{id:'remo_t',name:'Remo máquina T',baseline:30,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'press_inclinado',name:'Press inclinado mancuernas',baseline:25,series:3,repsMin:8,repsMax:12,rest:'2 min'},{id:'jalon_pecho',name:'Jalón al pecho',baseline:60,series:3,repsMin:8,repsMax:12,rest:'2 min'},{id:'curl_scott',name:'Curl Scott barra Z',baseline:20,series:3,repsMin:8,repsMax:12,rest:'90 s'},{id:'curl_alterno',name:'Curl martillo mancuernas',baseline:20,series:3,repsMin:10,repsMax:15,rest:'90 s'},{id:'plancha_peso',name:'Plancha con peso',baseline:null,series:3,repsMin:30,repsMax:45,rest:'60 s',isTime:true}]},'2':{name:'Pierna A',exercises:[{id:'incline_squat',name:'Incline Squat (máquina)',baseline:80,series:4,repsMin:5,repsMax:6,rest:'3 min'},{id:'peso_muerto',name:'Peso muerto convencional',baseline:80,series:4,repsMin:4,repsMax:5,rest:'3 min'},{id:'prensa',name:'Prensa inclinada',baseline:140,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'aductor',name:'Aductor máquina',baseline:null,series:3,repsMin:12,repsMax:15,rest:'90 s'},{id:'abduccion',name:'Abducción cadera',baseline:null,series:3,repsMin:12,repsMax:15,rest:'90 s'},{id:'dead_bug',name:'Dead Bug',baseline:null,series:3,repsMin:8,repsMax:10,rest:'60 s'}]},'3':{name:'Torso B',exercises:[{id:'remo_polea',name:'Remo polea baja',baseline:70,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'jalon_abierto',name:'Jalón abierto',baseline:70,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'press_declinado',name:'Press declinado',baseline:60,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'ext_triceps',name:'Extensión tríceps cabeza',baseline:50,series:3,repsMin:10,repsMax:12,rest:'90 s'},{id:'face_pull',name:'Face pull',baseline:22.5,series:3,repsMin:12,repsMax:15,rest:'90 s'},{id:'pallof',name:'Pallof Press',baseline:null,series:3,repsMin:10,repsMax:10,rest:'60 s'}]},'4':{name:'Pierna B',exercises:[{id:'sentadilla_libre',name:'Sentadilla libre',baseline:60,series:4,repsMin:6,repsMax:8,rest:'3 min'},{id:'rdl',name:'Peso muerto rumano',baseline:80,series:3,repsMin:6,repsMax:8,rest:'2 min'},{id:'prensa_d4',name:'Prensa inclinada',baseline:110,series:3,repsMin:8,repsMax:10,rest:'2 min'},{id:'ext_cuadriceps',name:'Extensión cuádriceps',baseline:70,series:3,repsMin:10,repsMax:12,rest:'90 s'},{id:'curl_femoral',name:'Curl femoral tumbado',baseline:42.5,series:3,repsMin:8,repsMax:10,rest:'90 s'}]}};
-const STORAGE_KEY='oscar_sessions';
-const WEIGHT_JUMPS={press_banca:2.5,remo_t:2.5,press_inclinado:2.5,jalon_pecho:2.5,curl_scott:2.5,curl_alterno:2,plancha_peso:0,incline_squat:5,peso_muerto:5,prensa:10,aductor:2.5,abduccion:2.5,dead_bug:0,remo_polea:2.5,jalon_abierto:2.5,press_declinado:2.5,ext_triceps:2.5,face_pull:2.5,pallof:2.5,sentadilla_libre:2.5,rdl:2.5,prensa_d4:5,ext_cuadriceps:2.5,curl_femoral:2.5};
-const DAY_SUBTITLES={'1':'Empuje · Tirón · Bíceps','2':'Cuádriceps · Core · Aductores','3':'Tirón · Empuje · Tríceps · Core','4':'Cadera · Glúteo · Isquios'};
-const DAY_NAMES_LABEL={'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
-let sessions=[],selectedFeeling='';
+'use strict';
 
-async function storageGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-async function storageSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){throw new Error(’No se pudo guardar: ’+e.message);}}
-
-async function loadData(){
-try{const s=await storageGet(STORAGE_KEY);if(s&&Array.isArray(s))sessions=s;}catch(e){}
-if(sessions.length===0){
-sessions=[{“day”:“4”,“dayName”:“Pierna B”,“date”:“2026-04-30”,“feeling”:“😓 Cansado”,“notes”:””,“exercises”:[{“id”:“sentadilla_libre”,“name”:“Sentadilla libre”,“sets”:[{“weight”:60,“reps”:5},{“weight”:60,“reps”:6},{“weight”:60,“reps”:6},{“weight”:60,“reps”:6}],“weight”:60,“baseline”:null},{“id”:“rdl”,“name”:“Peso muerto rumano”,“sets”:[{“weight”:80,“reps”:6},{“weight”:80,“reps”:8},{“weight”:80,“reps”:8}],“weight”:80,“baseline”:80},{“id”:“prensa_d4”,“name”:“Prensa inclinada”,“sets”:[{“weight”:140,“reps”:10},{“weight”:140,“reps”:10},{“weight”:140,“reps”:10}],“weight”:140,“baseline”:110},{“id”:“ext_cuadriceps”,“name”:“Extensión cuádriceps”,“sets”:[{“weight”:70,“reps”:11},{“weight”:70,“reps”:12},{“weight”:70,“reps”:15}],“weight”:70,“baseline”:70},{“id”:“curl_femoral”,“name”:“Curl femoral tumbado”,“sets”:[{“weight”:42.5,“reps”:10},{“weight”:42.5,“reps”:10},{“weight”:42.5,“reps”:10}],“weight”:42.5,“baseline”:42.5}],“id”:1777542083909},{“day”:“3”,“dayName”:“Torso B”,“date”:“2026-04-28”,“feeling”:“😐 Normal”,“notes”:””,“exercises”:[{“id”:“remo_polea”,“name”:“Remo polea baja”,“sets”:[{“weight”:70,“reps”:10},{“weight”:80,“reps”:9},{“weight”:80,“reps”:9}],“weight”:80,“baseline”:70},{“id”:“jalon_abierto”,“name”:“Jalón abierto”,“sets”:[{“weight”:70,“reps”:10},{“weight”:70,“reps”:9},{“weight”:70,“reps”:9}],“weight”:70,“baseline”:70},{“id”:“press_declinado”,“name”:“Press declinado”,“sets”:[{“weight”:65,“reps”:8},{“weight”:65,“reps”:8},{“weight”:65,“reps”:7}],“weight”:65,“baseline”:60},{“id”:“ext_triceps”,“name”:“Extensión tríceps cabeza”,“sets”:[{“weight”:50,“reps”:10},{“weight”:50,“reps”:10},{“weight”:50,“reps”:10}],“weight”:50,“baseline”:50},{“id”:“face_pull”,“name”:“Face pull”,“sets”:[{“weight”:35,“reps”:12},{“weight”:35,“reps”:15},{“weight”:35,“reps”:15}],“weight”:35,“baseline”:22.5},{“id”:“pallof”,“name”:“Pallof Press”,“sets”:[{“weight”:22.5,“reps”:10},{“weight”:22.5,“reps”:10},{“weight”:22.5,“reps”:10}],“weight”:22.5,“baseline”:null}],“id”:1777369610573},{“day”:“1”,“dayName”:“Torso A”,“date”:“2026-04-21”,“feeling”:””,“notes”:””,“exercises”:[{“id”:“press_banca”,“name”:“Press banca plano”,“sets”:[{“weight”:67.5,“reps”:6},{“weight”:67.5,“reps”:6},{“weight”:67.5,“reps”:6},{“weight”:67.5,“reps”:6}],“weight”:67.5,“baseline”:60},{“id”:“remo_t”,“name”:“Remo máquina T”,“sets”:[{“weight”:30,“reps”:10},{“weight”:35,“reps”:10},{“weight”:35,“reps”:10}],“weight”:35,“baseline”:30},{“id”:“press_inclinado”,“name”:“Press inclinado mancuernas”,“sets”:[{“weight”:25,“reps”:11},{“weight”:25,“reps”:11},{“weight”:25,“reps”:8}],“weight”:25,“baseline”:67.5},{“id”:“jalon_pecho”,“name”:“Jalón al pecho”,“sets”:[{“weight”:62.5,“reps”:10},{“weight”:70,“reps”:12},{“weight”:70,“reps”:12}],“weight”:70,“baseline”:60},{“id”:“curl_scott”,“name”:“Curl Scott barra Z”,“sets”:[{“weight”:20,“reps”:9},{“weight”:20,“reps”:10},{“weight”:20,“reps”:9}],“weight”:20,“baseline”:20},{“id”:“curl_alterno”,“name”:“Curl martillo mancuernas”,“sets”:[{“weight”:20,“reps”:10},{“weight”:20,“reps”:10},{“weight”:20,“reps”:10}],“weight”:20,“baseline”:20},{“id”:“plancha_peso”,“name”:“Plancha con peso”,“sets”:[{“weight”:null,“reps”:30},{“weight”:null,“reps”:30},{“weight”:null,“reps”:30}],“weight”:null,“baseline”:null}],“id”:1776765161864},{“day”:“3”,“dayName”:“Torso B”,“date”:“2026-04-16”,“feeling”:“💪 Fuerte”,“notes”:””,“exercises”:[{“id”:“remo_polea”,“name”:“Remo polea baja”,“sets”:[{“weight”:80,“reps”:8},{“weight”:80,“reps”:9},{“weight”:80,“reps”:9}],“weight”:80,“baseline”:70},{“id”:“jalon_abierto”,“name”:“Jalón abierto”,“sets”:[{“weight”:70,“reps”:10},{“weight”:70,“reps”:9},{“weight”:70,“reps”:9}],“weight”:70,“baseline”:70},{“id”:“press_declinado”,“name”:“Press declinado”,“sets”:[{“weight”:65,“reps”:8},{“weight”:65,“reps”:9},{“weight”:65,“reps”:9}],“weight”:65,“baseline”:60},{“id”:“ext_triceps”,“name”:“Extensión tríceps cabeza”,“sets”:[{“weight”:42.5,“reps”:12},{“weight”:50,“reps”:10},{“weight”:50,“reps”:10}],“weight”:50,“baseline”:50},{“id”:“face_pull”,“name”:“Face pull”,“sets”:[{“weight”:35,“reps”:15},{“weight”:35,“reps”:15},{“weight”:35,“reps”:15}],“weight”:35,“baseline”:22.5},{“id”:“pallof”,“name”:“Pallof Press”,“sets”:[{“weight”:22.5,“reps”:10},{“weight”:22.5,“reps”:10},{“weight”:22.5,“reps”:10}],“weight”:22.5,“baseline”:null}],“id”:1776332107530},{“day”:“4”,“dayName”:“Pierna B”,“date”:“2026-04-15”,“feeling”:“💪 Fuerte”,“notes”:“Registrado por el entrenador”,“id”:1744718400000,“exercises”:[{“id”:“sentadilla_libre”,“name”:“Sentadilla libre”,“sets”:[{“weight”:50,“reps”:8},{“weight”:60,“reps”:8},{“weight”:60,“reps”:8},{“weight”:60,“reps”:8}],“weight”:60,“baseline”:null},{“id”:“rdl”,“name”:“Peso muerto rumano”,“sets”:[{“weight”:80,“reps”:8},{“weight”:80,“reps”:8},{“weight”:80,“reps”:8}],“weight”:80,“baseline”:80},{“id”:“prensa_d4”,“name”:“Prensa inclinada”,“sets”:[{“weight”:140,“reps”:10},{“weight”:140,“reps”:10},{“weight”:140,“reps”:10}],“weight”:140,“baseline”:110},{“id”:“ext_cuadriceps”,“name”:“Extensión cuádriceps”,“sets”:[{“weight”:70,“reps”:12},{“weight”:70,“reps”:12},{“weight”:70,“reps”:12}],“weight”:70,“baseline”:70},{“id”:“curl_femoral”,“name”:“Curl femoral tumbado”,“sets”:[{“weight”:42.5,“reps”:10},{“weight”:42.5,“reps”:10},{“weight”:42.5,“reps”:9}],“weight”:42.5,“baseline”:42.5}]}];
-await storageSet(STORAGE_KEY,sessions);
-}
-updateHeader();renderRoutine();
-}
-
-async function saveData(){setSaveIndicator(‘saving’);try{await storageSet(STORAGE_KEY,sessions);setSaveIndicator(‘ok’);return true;}catch(e){setSaveIndicator(‘error’);showToast(‘❌ Error: ‘+e.message,’#e63946’);return false;}}
-function setSaveIndicator(s){const el=document.getElementById(‘saveIndicator’);if(!el)return;const st={saving:{text:‘💾 Guardando…’,color:‘var(–gold)’},ok:{text:‘✅ Guardado’,color:‘var(–green)’},error:{text:‘❌ Error’,color:‘var(–red)’},idle:{text:’’,color:‘transparent’}};const d=st[s]||st.idle;el.textContent=d.text;el.style.color=d.color;if(s===‘ok’)setTimeout(()=>setSaveIndicator(‘idle’),3000);}
-function updateHeader(){document.getElementById(‘sessionCount’).textContent=sessions.length+’ sesiones’;}
-function showTab(name){document.querySelectorAll(’.section’).forEach(s=>s.classList.remove(‘active’));document.querySelectorAll(’.tab’).forEach(t=>t.classList.remove(‘active’));document.getElementById(‘section-’+name).classList.add(‘active’);event.target.classList.add(‘active’);if(name===‘routine’)renderRoutine();if(name===‘progress’)renderProgress();if(name===‘history’)renderHistory();if(name===‘coach’)renderCoach();if(name===‘backup’)renderStorageStatus();}
-function selectFeeling(btn,v){document.querySelectorAll(’.feeling-btn’).forEach(b=>b.classList.remove(‘selected’));btn.classList.add(‘selected’);selectedFeeling=v;}
-
-// ===== CORE: PROGRESIÓN DINÁMICA =====
-// Devuelve las últimas N sesiones que contienen este ejercicio (más reciente primero)
-function getExerciseHistory(exId,limit=5){
-const out=[];
-for(const s of sessions){
-const ex=s.exercises.find(e=>e.id===exId);
-if(ex&&ex.sets&&ex.sets.length){
-const valid=ex.sets.filter(set=>set.weight!==null&&set.weight!==undefined&&set.reps);
-if(valid.length){
-const w=Math.max(…valid.map(s=>s.weight));
-const setsAtTopWeight=valid.filter(s=>s.weight===w);
-out.push({date:s.date,feeling:s.feeling||’’,weight:w,sets:setsAtTopWeight,allSets:valid});
-if(out.length>=limit)break;
-}
-}
-}
-return out;
-}
-
-// Estado emocional últimas 2 sesiones cualesquiera (no de este ejercicio, sino global)
-function getRecentFatigue(){
-const last2=sessions.slice(0,2);
-if(last2.length<2)return ‘normal’;
-const f=last2.map(s=>s.feeling||’’);
-const tired=f.filter(x=>x.includes(‘Cansado’)||x.includes(‘Destruido’)).length;
-const strong=f.filter(x=>x.includes(‘Fuerte’)||x.includes(‘Bestial’)).length;
-if(tired>=2)return ‘tired’;
-if(strong>=2)return ‘strong’;
-return ‘normal’;
-}
-
-// Lógica principal: dado un ejercicio, decide qué hacer la próxima sesión
-function computeNextTarget(ex){
-const hist=getExerciseHistory(ex.id,5);
-const fatigue=getRecentFatigue();
-
-// Sin historial: empezar por baseline en rango medio-bajo
-if(!hist.length){
-if(ex.baseline===null)return{action:‘explore’,weight:null,reps:ex.repsMin,label:‘Explorar’,color:‘hold’,reason:‘Primera vez. Encuentra peso que te deje 6-8 reps con esfuerzo.’};
-return{action:‘start’,weight:ex.baseline,reps:ex.repsMin,label:`${ex.baseline}kg × ${ex.repsMin}`,color:‘push’,reason:‘Primera sesión: empieza por el rep mínimo.’};
-}
-
-const last=hist[0];
-const lastWeight=last.weight;
-const lastSets=last.sets; // sets al peso máximo
-const jump=WEIGHT_JUMPS[ex.id]||2.5;
-
-// Calcular si llegó al tope del rango en esa sesión
-const setsCount=lastSets.length;
-const hitsTop=lastSets.filter(s=>s.reps>=ex.repsMax).length;
-const hitsMin=lastSets.filter(s=>s.reps>=ex.repsMin).length;
-const reachedTop=setsCount>0&&hitsTop>=Math.ceil(setsCount*0.66); // 2/3 series al tope
-const reachedMin=setsCount>0&&hitsMin>=Math.ceil(setsCount*0.66);
-
-// Detectar retroceso vs sesión anterior con MISMO peso
-if(hist.length>=2){
-const prev=hist[1];
-if(prev.weight===lastWeight){
-const prevAvg=prev.sets.reduce((a,s)=>a+s.reps,0)/prev.sets.length;
-const lastAvg=lastSets.reduce((a,s)=>a+s.reps,0)/lastSets.length;
-if(lastAvg<prevAvg-1.5){
-return{action:‘hold’,weight:lastWeight,reps:ex.repsMax,label:`${lastWeight}kg × ${ex.repsMax}`,color:‘hold’,reason:`Bajaste de ${prevAvg.toFixed(1)} a ${lastAvg.toFixed(1)} reps. Mantén peso y recupera.`};
-}
-}
-}
-
-// Detectar estancamiento: 3+ sesiones mismo peso sin alcanzar el tope
-if(hist.length>=3&&jump>0){
-const sameW=hist.slice(0,3).every(h=>h.weight===lastWeight);
-if(sameW){
-const noneReachedTop=hist.slice(0,3).every(h=>{
-const ht=h.sets.filter(s=>s.reps>=ex.repsMax).length;
-return ht<Math.ceil(h.sets.length*0.66);
-});
-if(noneReachedTop){
-const newW=Math.max(lastWeight-jump,ex.baseline||lastWeight);
-if(newW<lastWeight){
-return{action:‘deload’,weight:newW,reps:ex.repsMin,label:`${newW}kg × ${ex.repsMin}`,color:‘deload’,reason:`3 sesiones atascado en ${lastWeight}kg. Baja a ${newW}kg y vuelve a empujar.`};
-}
-return{action:‘hold’,weight:lastWeight,reps:ex.repsMax,label:`${lastWeight}kg × ${ex.repsMax}`,color:‘hold’,reason:`Estancado en ${lastWeight}kg. Concéntrate en técnica.`};
-}
-}
-}
-
-// Confirmar subida: necesita 2 sesiones consecutivas al tope (al mismo peso)
-if(reachedTop&&jump>0){
-let confirmedTop=false;
-if(hist.length>=2&&hist[1].weight===lastWeight){
-const prevSets=hist[1].sets;
-const prevHitsTop=prevSets.filter(s=>s.reps>=ex.repsMax).length;
-if(prevHitsTop>=Math.ceil(prevSets.length*0.66))confirmedTop=true;
-}
-
-```
-if(confirmedTop){
-  // Modulación por fatiga: si vienes cansado, retrasa la subida
-  if(fatigue==='tired'){
-    return{action:'hold',weight:lastWeight,reps:ex.repsMax,label:`${lastWeight}kg × ${ex.repsMax}`,color:'hold',reason:`Tocaba subir, pero llevas 2 sesiones cansado. Mantén una semana más.`};
+// Captura cualquier error y lo muestra en pantalla
+window.addEventListener('error', function(e) {
+  var box = document.getElementById('errorBox');
+  if (box) {
+    box.style.display = 'block';
+    box.textContent = '⚠️ Error: ' + e.message + '\n@ ' + (e.filename||'').split('/').pop() + ':' + e.lineno;
   }
-  const newW=lastWeight+jump;
-  return{action:'up',weight:newW,reps:ex.repsMin,label:`${newW}kg × ${ex.repsMin}`,color:'up',reason:`✅ ${lastWeight}kg dominado 2 sesiones. Sube a ${newW}kg empezando por ${ex.repsMin} reps.`};
-} else {
-  // Una sesión al tope: confirma la próxima
-  return{action:'confirm',weight:lastWeight,reps:ex.repsMax,label:`${lastWeight}kg × ${ex.repsMax}`,color:'push',reason:`Llegaste al tope una vez. Confirma con otra sesión a ${ex.repsMax} reps y subimos.`};
-}
-```
-
-}
-
-// Aún no llega al tope: empujar reps al mismo peso
-if(reachedMin){
-return{action:‘push’,weight:lastWeight,reps:ex.repsMax,label:`${lastWeight}kg × ${ex.repsMax}`,color:‘push’,reason:`Apunta a ${ex.repsMax} reps en mayoría de series.`};
-}
-
-// Ni siquiera llega al rango mínimo: ¿peso muy alto?
-return{action:‘hold’,weight:lastWeight,reps:ex.repsMin,label:`${lastWeight}kg × ${ex.repsMin}`,color:‘hold’,reason:`Aún no consolidas ${ex.repsMin} reps. Mantén peso hasta dominarlo.`};
-}
-
-function renderRoutine(){
-const c=document.getElementById(‘routineContent’);if(!c)return;
-const fatigue=getRecentFatigue();
-let fatigueBanner=’’;
-if(fatigue===‘tired’){
-fatigueBanner=`<div style="background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--gold)">⚠️ Las últimas 2 sesiones marcaste cansancio. La app está siendo conservadora con las subidas.</div>`;
-} else if(fatigue===‘strong’){
-fatigueBanner=`<div style="background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--green)">🔥 Vienes fuerte. Buen momento para empujar las subidas.</div>`;
-}
-
-c.innerHTML=fatigueBanner+Object.entries(DAYS).map(([dn,dd])=>{
-const rows=dd.exercises.map(ex=>{
-const hist=getExerciseHistory(ex.id,1);
-const lw=hist.length?hist[0].weight:null;
-const target=computeNextTarget(ex);
-const lastCell=lw!==null?`<span style="color:var(--blue);font-family:'DM Mono',monospace;font-size:11px">${lw}kg</span>`:ex.baseline!==null?`<span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:11px">${ex.baseline}kg</span>`:’<span style="color:#444">—</span>’;
-const targetCell=target.weight!==null?`<span class="target-pill target-${target.color}">${target.label}</span><div class="reason-text">${target.reason}</div>`:`<span class="target-pill target-hold">${target.label}</span><div class="reason-text">${target.reason}</div>`;
-const rangeCell=`<span style="color:var(--muted);font-size:11px;font-family:'DM Mono',monospace">${ex.repsMin}-${ex.repsMax}</span>`;
-return `<tr><td style="font-weight:500">${ex.name}</td><td style="text-align:center">${ex.series}</td><td style="text-align:center">${rangeCell}</td><td style="text-align:center">${lastCell}</td><td>${targetCell}</td></tr>`;
-}).join(’’);
-return `<div class="card"><div class="card-title" style="margin-bottom:4px"><span class="day-badge">DÍA ${dn}</span> ${DAY_NAMES_LABEL[dn]} <span style="font-size:11px;color:var(--muted);font-weight:400"> — ${DAY_SUBTITLES[dn]}</span></div><table class="routine-table"><tr><th style="width:32%">Ejercicio</th><th style="text-align:center">S</th><th style="text-align:center">Rango</th><th style="text-align:center;color:var(--blue)">Último</th><th style="color:var(--green)">Próximo objetivo</th></tr>${rows}</table><div class="cardio-bar">🚴 LISS Bicicleta — 22 min — FC ~125 ppm</div></div>`;
-}).join(’’);
-}
-
-function renderExerciseInputs(){
-const day=document.getElementById(‘logDay’).value;
-const c=document.getElementById(‘exerciseInputsContainer’);
-const inp=document.getElementById(‘exerciseInputs’);
-if(!day){c.style.display=‘none’;return;}
-c.style.display=‘block’;
-const d=DAYS[day];
-inp.innerHTML=d.exercises.map(ex=>{
-const n=ex.series||3;
-const target=computeNextTarget(ex);
-const placeholder=target.weight!==null?target.weight:(ex.baseline||’’);
-const repsPlaceholder=target.reps||ex.repsMin;
-const rows=Array.from({length:n},(_,i)=>`<div class="series-row"><div class="series-num">S${i+1}</div><div class="input-col"><input type="number" id="ex_${ex.id}_s${i}" placeholder="${placeholder}" step="0.5" min="0"><div class="input-label-small">KG</div></div><div class="input-col"><input type="number" id="reps_${ex.id}_s${i}" placeholder="${repsPlaceholder}" step="1" min="0"><div class="input-label-small">REPS</div></div></div>`).join(’’);
-return `<div class="exercise-block"><div class="exercise-block-header"><div style="display:flex;flex-direction:column;flex:1"><span class="exercise-name-log">${ex.name}</span><span class="exercise-target">🎯 ${target.label}</span></div><span class="exercise-meta">${n}×${ex.repsMin}-${ex.repsMax}</span></div><div class="series-rows">${rows}</div></div>`;
-}).join(’’);
-}
-
-async function saveSession(){
-const day=document.getElementById(‘logDay’).value;
-const date=document.getElementById(‘logDate’).value;
-const notes=document.getElementById(‘logNotes’).value;
-if(!day||!date){showToast(‘⚠️ Selecciona fecha y día’,’#e63946’);return;}
-const d=DAYS[day];
-const exercises=d.exercises.map(ex=>{
-const n=ex.series||3;
-const sets=Array.from({length:n},(_,i)=>({weight:parseFloat(document.getElementById(`ex_${ex.id}_s${i}`)?.value)||null,reps:parseInt(document.getElementById(`reps_${ex.id}_s${i}`)?.value)||null}));
-const w=sets.map(s=>s.weight).filter(Boolean);
-return{id:ex.id,name:ex.name,sets,weight:w.length?Math.max(…w):null,baseline:ex.baseline};
-});
-const session={day,dayName:d.name,date,feeling:selectedFeeling,notes,exercises,id:Date.now()};
-sessions.unshift(session);
-// Ordenar por fecha desc para que la lógica funcione bien si meten sesiones antiguas
-sessions.sort((a,b)=>new Date(b.date)-new Date(a.date));
-const saved=await saveData();
-if(!saved){sessions=sessions.filter(s=>s.id!==session.id);return;}
-updateHeader();renderRoutine();
-showFeedbackModal(session,d);
-document.getElementById(‘logDay’).value=’’;
-document.getElementById(‘logNotes’).value=’’;
-document.getElementById(‘exerciseInputsContainer’).style.display=‘none’;
-document.querySelectorAll(’.feeling-btn’).forEach(b=>b.classList.remove(‘selected’));
-selectedFeeling=’’;
-}
-
-function getPersonalBests(){const p={};sessions.forEach(s=>s.exercises.forEach(ex=>{if(ex.weight&&(!p[ex.id]||ex.weight>p[ex.id]))p[ex.id]=ex.weight;}));return p;}
-
-function renderProgress(){
-const c=document.getElementById(‘progressContent’);
-const p=getPersonalBests();
-const ls=sessions[0];
-const allEx=Object.values(DAYS).flatMap(d=>d.exercises).filter(ex=>ex.baseline!==null);
-const seen=new Set();
-const kx=allEx.filter(ex=>{if(seen.has(ex.id))return false;seen.add(ex.id);return true;});
-c.innerHTML=`<div class="progress-grid"><div class="stat-card"><div class="stat-label">Sesiones</div><div class="stat-value">${sessions.length}</div><div class="stat-sub">totales</div></div><div class="stat-card"><div class="stat-label">Última sesión</div><div class="stat-value" style="font-size:22px">${ls?formatDate(ls.date):'—'}</div><div class="stat-sub">${ls?'Día '+ls.day+' — '+ls.dayName:'Sin sesiones'}</div></div></div><div class="card"><div class="card-title">🏆 RECORDS PERSONALES</div><table class="prog-table"><tr><th>Ejercicio</th><th>Base</th><th>Mejor</th><th>Mejora</th></tr>${kx.map(ex=>{const pb=p[ex.id]||ex.baseline;const dif=pb-ex.baseline;return`<tr><td>${ex.name}</td><td style="font-family:'DM Mono',monospace;color:var(--muted)">${ex.baseline}kg</td><td style="font-family:'DM Mono',monospace;color:var(--blue);font-weight:600">${pb}kg</td><td>${dif>0?`<span class="arrow-up">▲ +${dif}kg</span>`:’<span class="arrow-same">— base</span>’}</td></tr>`;}).join('')}</table></div>`;
-}
-
-function renderHistory(){
-const c=document.getElementById(‘historyContent’);
-if(!sessions.length){c.innerHTML=’<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Sin sesiones aún.</div></div>’;return;}
-c.innerHTML=sessions.map(s=>{
-const blocks=s.exercises.map(ex=>{
-let sh=’’;
-if(ex.sets&&ex.sets.length){
-const pills=ex.sets.map((set,i)=>{const kg=set.weight?`${set.weight}kg`:’—’;const rp=set.reps?`×${set.reps}`:’’;const hd=set.weight||set.reps;return`<span style="display:inline-block;background:${hd?'var(--dark)':'#1a1a1a'};border:1px solid ${hd?'#333':'#222'};border-radius:5px;padding:3px 8px;font-family:'DM Mono',monospace;font-size:11px;color:${hd?'var(--blue)':'#333'};margin:2px 3px 2px 0"><span style="color:#444;font-size:10px">S${i+1} </span>${kg}${rp}</span>`;}).join(’’);
-sh=`<div style="margin-top:5px;line-height:1.8">${pills}</div>`;
-} else if(ex.weight){sh=`<div style="margin-top:4px;font-family:'DM Mono',monospace;font-size:12px;color:var(--blue)">${ex.weight}kg</div>`;
-} else {sh=`<div style="margin-top:4px;font-size:12px;color:#333">—</div>`;}
-return `<div style="padding:10px 12px;border-bottom:1px solid #1a1a1a"><span style="font-size:13px;font-weight:500;color:var(--text)">${ex.name}</span>${sh}</div>`;
-}).join(’’);
-return `<div class="history-entry"><div style="padding:14px 16px;background:var(--dark4);display:flex;justify-content:space-between;align-items:center"><div><div class="history-day">Día ${s.day} — ${s.dayName}</div><div class="history-date">${formatDate(s.date)}${s.feeling?' · '+s.feeling:''}</div></div><div style="font-size:12px;color:var(--muted)">${s.exercises.length} ejercicios</div></div>${blocks}${s.notes?`<div style="padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic">💬 ${s.notes}</div>`:''}</div>`;
-}).join(’’);
-}
-
-function renderCoach(){
-const c=document.getElementById(‘coachContent’);
-const t=sessions.length;
-const fatigue=getRecentFatigue();
-
-// Recoger los ejercicios con su próximo objetivo agrupados por acción
-const allEx=Object.values(DAYS).flatMap(d=>d.exercises);
-const byAction={up:[],push:[],hold:[],deload:[],confirm:[]};
-allEx.forEach(ex=>{
-if(!getExerciseHistory(ex.id,1).length)return;
-const t=computeNextTarget(ex);
-if(byAction[t.action])byAction[t.action].push({ex,target:t});
-else if(t.action===‘start’)byAction.push.push({ex,target:t});
 });
 
-let fatigueMsg=’’;
-if(fatigue===‘tired’)fatigueMsg=’<div style="margin-top:10px;color:var(--gold)">⚠️ Fatiga detectada en últimas sesiones. La progresión está pausada — recupera antes de exigir más.</div>’;
-else if(fatigue===‘strong’)fatigueMsg=’<div style="margin-top:10px;color:var(--green)">🔥 Vienes con buena energía. Aprovecha para empujar.</div>’;
-
-c.innerHTML=`<div class="coach-card"><div class="coach-title">💬 ESTADO ACTUAL</div><div class="coach-msg">${t===0?'Registra tu primer entreno para empezar.':`Llevas <strong>${t} sesiones</strong>. Objetivo: <strong>91 → 80 kg sin perder músculo</strong>. Proteína 175 g/día, déficit 300-400 kcal.`}${fatigueMsg}</div></div> ${byAction.up.length?`<div class="card"><div class="card-title" style="color:var(--green)">↑ TOCA SUBIR PESO</div>${byAction.up.map(x=>`<div class="coach-tip" style="border-left-color:var(--green)"><strong>${x.ex.name}</strong> → ${x.target.label}<br><span style="color:var(--muted);font-size:12px">${x.target.reason}</span></div>`).join(’’)}</div>`:''} ${byAction.confirm.length?`<div class="card"><div class="card-title" style="color:var(--blue)">→ CONFIRMAR Y SUBIR</div>${byAction.confirm.map(x=>`<div class="coach-tip" style="border-left-color:var(--blue)"><strong>${x.ex.name}</strong> → ${x.target.label}<br><span style="color:var(--muted);font-size:12px">${x.target.reason}</span></div>`).join(’’)}</div>`:''} ${byAction.push.length?`<div class="card"><div class="card-title">→ EMPUJAR REPS</div>${byAction.push.map(x=>`<div class="coach-tip"><strong>${x.ex.name}</strong> → ${x.target.label}<br><span style="color:var(--muted);font-size:12px">${x.target.reason}</span></div>`).join(’’)}</div>`:''} ${byAction.hold.length?`<div class="card"><div class="card-title" style="color:var(--gold)">= MANTENER</div>${byAction.hold.map(x=>`<div class="coach-tip" style="border-left-color:var(--gold)"><strong>${x.ex.name}</strong> → ${x.target.label}<br><span style="color:var(--muted);font-size:12px">${x.target.reason}</span></div>`).join(’’)}</div>`:''} ${byAction.deload.length?`<div class="card"><div class="card-title" style="color:var(--red)">↓ DESCARGA</div>${byAction.deload.map(x=>`<div class="coach-tip" style="border-left-color:var(--red)"><strong>${x.ex.name}</strong> → ${x.target.label}<br><span style="color:var(--muted);font-size:12px">${x.target.reason}</span></div>`).join(’’)}</div>`:’’}
-
-  <div class="card"><div class="card-title">🎾 PÁDEL + GYM</div><div class="coach-tip">Con 3+ partidos semanales, prioriza compuestos. Si bajas rendimiento 2 semanas seguidas, descarga: -40% peso, 2-3 series.</div></div>`;
-}
-
-function analyzeSession(session){
-const up=[],wa=[],hi=[];
-session.exercises.forEach(ex=>{
-const exDef=Object.values(DAYS).flatMap(d=>d.exercises).find(e=>e.id===ex.id);
-if(!exDef||!ex.sets)return;
-const vs=ex.sets.filter(s=>s.weight&&s.reps);
-if(!vs.length)return;
-const w=Math.max(…vs.map(s=>s.weight));
-const setsAtW=vs.filter(s=>s.weight===w);
-const j=WEIGHT_JUMPS[ex.id]||2.5;
-
-```
-// PR check
-const pb=sessions.slice(1).reduce((m,s)=>{const e=s.exercises.find(e=>e.id===ex.id);return e&&e.weight?Math.max(m,e.weight):m;},0);
-if(w>pb&&pb>0)hi.push({name:ex.name,weight:w});
-
-// ¿Llegó al tope del rango?
-const hitsTop=setsAtW.filter(s=>s.reps>=exDef.repsMax).length;
-if(hitsTop>=Math.ceil(setsAtW.length*0.66)&&j>0){
-  up.push({name:ex.name,currentWeight:w,nextWeight:w+j,reason:`${hitsTop}/${setsAtW.length} series a ${exDef.repsMax}+ reps`});
-}
-
-// Caída de reps significativa
-if(setsAtW.length>=3){
-  const f=setsAtW[0].reps,l=setsAtW[setsAtW.length-1].reps;
-  if(f-l>=3&&l<exDef.repsMin)wa.push({name:ex.name,weight:w,first:f,last:l});
-}
-```
-
-});
-return{upgrades:up,warnings:wa,highlights:hi};
-}
-
-function generateCoachMessage(session,analysis){
-const{upgrades:up,warnings:wa,highlights:hi}=analysis;
-const f=session.feeling||’’;
-let tone=‘normal’;
-if(f.includes(‘Bestial’)||f.includes(‘Fuerte’))tone=‘fire’;
-if(f.includes(‘Destruido’)||f.includes(‘Cansado’))tone=‘tired’;
-const msgs={
-fire:[‘🔥 Así se entrena. ‘+session.dayName+’ completado con energía brutal.’,‘Bestia. Días como este construyen el músculo de verdad.’],
-tired:[‘💪 Lo completaste aunque no estabas fino — eso es lo que distingue a los que progresan.’,‘Los días duros también cuentan. Descansa, come proteína.’],
-normal:[‘Sólido. ‘+session.dayName+’ en el bote.’,‘Consistencia es la clave. Otra sesión más hacia los 80 kg.’]
+// ==================== DATOS ====================
+var DAYS = {
+  '1': {name:'Torso A', exercises:[
+    {id:'press_banca', name:'Press banca plano', baseline:60, series:4, repsMin:5, repsMax:6},
+    {id:'remo_t', name:'Remo máquina T', baseline:30, series:3, repsMin:8, repsMax:10},
+    {id:'press_inclinado', name:'Press inclinado mancuernas', baseline:25, series:3, repsMin:8, repsMax:12},
+    {id:'jalon_pecho', name:'Jalón al pecho', baseline:60, series:3, repsMin:8, repsMax:12},
+    {id:'curl_scott', name:'Curl Scott barra Z', baseline:20, series:3, repsMin:8, repsMax:12},
+    {id:'curl_alterno', name:'Curl martillo mancuernas', baseline:20, series:3, repsMin:10, repsMax:15},
+    {id:'plancha_peso', name:'Plancha con peso', baseline:null, series:3, repsMin:30, repsMax:45}
+  ]},
+  '2': {name:'Pierna A', exercises:[
+    {id:'incline_squat', name:'Incline Squat', baseline:80, series:4, repsMin:5, repsMax:6},
+    {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5},
+    {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10},
+    {id:'aductor', name:'Aductor máquina', baseline:null, series:3, repsMin:12, repsMax:15},
+    {id:'abduccion', name:'Abducción cadera', baseline:null, series:3, repsMin:12, repsMax:15},
+    {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10}
+  ]},
+  '3': {name:'Torso B', exercises:[
+    {id:'remo_polea', name:'Remo polea baja', baseline:70, series:3, repsMin:8, repsMax:10},
+    {id:'jalon_abierto', name:'Jalón abierto', baseline:70, series:3, repsMin:8, repsMax:10},
+    {id:'press_declinado', name:'Press declinado', baseline:60, series:3, repsMin:8, repsMax:10},
+    {id:'ext_triceps', name:'Extensión tríceps', baseline:50, series:3, repsMin:10, repsMax:12},
+    {id:'face_pull', name:'Face pull', baseline:22.5, series:3, repsMin:12, repsMax:15},
+    {id:'pallof', name:'Pallof Press', baseline:null, series:3, repsMin:10, repsMax:10}
+  ]},
+  '4': {name:'Pierna B', exercises:[
+    {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8},
+    {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8},
+    {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10},
+    {id:'ext_cuadriceps', name:'Extensión cuádriceps', baseline:70, series:3, repsMin:10, repsMax:12},
+    {id:'curl_femoral', name:'Curl femoral', baseline:42.5, series:3, repsMin:8, repsMax:10}
+  ]}
 };
-let msg=msgs[tone][Math.floor(Math.random()*msgs[tone].length)];
-if(hi.length)msg+=’\n\n🏆 PR en ‘+hi.map(h=>h.name+’ (’+h.weight+‘kg)’).join(’, ‘)+’.’;
-if(wa.length)msg+=’\n\n⚠️ En ‘+wa.map(w=>`${w.name} (${w.first}→${w.last} reps)`).join(’, ‘)+’ las reps cayeron mucho. Descansa más entre series o baja peso.’;
-return msg;
+
+var WEIGHT_JUMPS = {
+  press_banca:2.5, remo_t:2.5, press_inclinado:2.5, jalon_pecho:2.5, curl_scott:2.5,
+  curl_alterno:2, plancha_peso:0, incline_squat:5, peso_muerto:5, prensa:10,
+  aductor:2.5, abduccion:2.5, dead_bug:0, remo_polea:2.5, jalon_abierto:2.5,
+  press_declinado:2.5, ext_triceps:2.5, face_pull:2.5, pallof:2.5,
+  sentadilla_libre:2.5, rdl:2.5, prensa_d4:5, ext_cuadriceps:2.5, curl_femoral:2.5
+};
+
+var DAY_LABELS = {'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
+var STORAGE_KEY = 'oscar_sessions';
+var sessions = [];
+var selectedFeeling = '';
+
+// ==================== STORAGE ====================
+function loadFromStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) sessions = parsed;
+    }
+  } catch(e) { console.error('load:', e); }
 }
 
-function showFeedbackModal(session,dayData){
-const an=analyzeSession(session);
-const msg=generateCoachMessage(session,an);
-const{upgrades:up}=an;
-const ft=session.feeling?`<span class="feeling-tag">${session.feeling}</span>`:’’;
-const bk=JSON.stringify(sessions);
-document.getElementById(‘feedbackContent’).innerHTML=`<div class="modal-title">Día ${session.day} — ${session.dayName}</div><div class="modal-subtitle">${formatDate(session.date)}</div>${ft}<div class="feedback-section"><div class="feedback-label">💬 Tu entrenador</div><div class="feedback-msg">${msg.replace(/\n/g,'<br>')}</div></div>${up.length?`<div class="feedback-section"><div class="feedback-label">📈 Subidas detectadas (se confirmarán al repetir)</div>${up.map(u=>`<div class="upgrade-row"><div><div class="upgrade-ex">${u.name}</div><div class="upgrade-reason">${u.reason}</div></div><div style="display:flex;align-items:center;gap:4px"><span class="upgrade-now">${u.currentWeight}kg</span><span class="upgrade-arrow">→</span><span class="upgrade-next">${u.nextWeight}kg</span></div></div>`).join(’’)}</div>`:''}<div style="margin-top:16px;background:rgba(230,57,70,0.06);border:1px solid rgba(230,57,70,0.2);border-radius:10px;padding:14px"><div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:8px">💾 COPIA DE SEGURIDAD</div><textarea id="quickBackupText" readonly style="width:100%;height:80px;font-size:10px;font-family:'DM Mono',monospace;background:var(--dark);color:#666;border:1px solid #333;border-radius:6px;padding:8px;resize:none">${bk}</textarea><button onclick="quickCopyBackup()" style="width:100%;margin-top:8px;background:var(--red);color:white;border:none;padding:10px;border-radius:7px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer">📋 COPIAR BACKUP</button></div>`;
-document.getElementById(‘feedbackModal’).classList.add(‘show’);
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+    return true;
+  } catch(e) {
+    showToast('❌ No se pudo guardar', '#e63946');
+    return false;
+  }
 }
 
-function quickCopyBackup(){const ta=document.getElementById(‘quickBackupText’);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ta.value).then(()=>showToast(‘✅ Copiado’)).catch(()=>{ta.select();ta.setSelectionRange(0,99999);document.execCommand(‘copy’);showToast(‘✅ Copiado’);});}else{ta.select();ta.setSelectionRange(0,99999);document.execCommand(‘copy’);showToast(‘✅ Copiado’);}}
-function closeFeedbackModal(e){if(e.target===document.getElementById(‘feedbackModal’))document.getElementById(‘feedbackModal’).classList.remove(‘show’);}
-function exportData(){const j=JSON.stringify(sessions,null,2);const b=document.getElementById(‘exportBox’);const ta=document.getElementById(‘exportText’);ta.value=j;b.style.display=‘block’;ta.scrollIntoView({behavior:‘smooth’,block:‘center’});showToast(‘✅ Datos listos’);}
-function copyExport(){const ta=document.getElementById(‘exportText’);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ta.value).then(()=>showToast(‘✅ Copiado’)).catch(()=>{ta.select();ta.setSelectionRange(0,99999);document.execCommand(‘copy’);showToast(‘✅ Copiado’);});}else{ta.select();ta.setSelectionRange(0,99999);document.execCommand(‘copy’);showToast(‘✅ Copiado’);}}
-async function importFromText(){const raw=document.getElementById(‘importText’).value.trim();if(!raw){showToast(‘⚠️ Pega el JSON primero’,’#f4a261’);return;}let imp=null;try{const p=JSON.parse(raw);imp=Array.isArray(p)?p:p&&Array.isArray(p.sessions)?p.sessions:null;if(!imp)throw new Error(‘Formato inválido’);}catch(e){showToast(‘❌ Error: ‘+e.message,’#e63946’);return;}sessions=imp;sessions.sort((a,b)=>new Date(b.date)-new Date(a.date));const ok=await saveData();if(ok){document.getElementById(‘importText’).value=’’;updateHeader();renderRoutine();showToast(`✅ ${sessions.length} sesiones recuperadas`);renderStorageStatus();}}
-async function clearAllData(){if(!confirm(’¿Borrar todas las sesiones? No se puede deshacer.’))return;sessions=[];await saveData();try{localStorage.removeItem(STORAGE_KEY);}catch{}updateHeader();showToast(‘🗑️ Datos borrados’);renderStorageStatus();}
-async function renderStorageStatus(){const el=document.getElementById(‘storageStatus’);if(!el)return;let st=‘❌ No disponible’;try{const l=localStorage.getItem(STORAGE_KEY);st=l?`✅ OK — ${JSON.parse(l).length} sesiones`:‘⚠️ Vacío’;}catch(e){st=‘❌ Error’;}el.innerHTML=`<div style="display:flex;justify-content:space-between"><span>💾 Local</span><span style="color:var(--text)">${st}</span></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span>🏋️ En memoria</span><span style="color:var(--text)">${sessions.length} sesiones</span></div>`;}
-function formatDate(d){if(!d)return’—’;const[y,m,dd]=d.split(’-’);return`${dd}/${m}/${y}`;}
-function showToast(msg,color=’#52b788’){const t=document.getElementById(‘toast’);t.style.background=color;t.textContent=msg;t.classList.add(‘show’);setTimeout(()=>t.classList.remove(‘show’),2800);}
-document.addEventListener(‘DOMContentLoaded’,async()=>{document.getElementById(‘logDate’).valueAsDate=new Date();await loadData();});
+// ==================== UTILS ====================
+function $(id) { return document.getElementById(id); }
+function formatDate(d) { if(!d) return '—'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function showToast(msg, color) {
+  var t = $('toast'); if(!t) return;
+  t.style.background = color || '#52b788';
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+function updateHeader() {
+  var el = $('sessionCount');
+  if (el) el.textContent = sessions.length + ' sesiones';
+}
+
+// ==================== TABS ====================
+function showTab(name, tabEl) {
+  var sections = document.querySelectorAll('.section');
+  for (var i=0; i<sections.length; i++) sections[i].classList.remove('active');
+  var tabs = document.querySelectorAll('.tab');
+  for (var j=0; j<tabs.length; j++) tabs[j].classList.remove('active');
+  var target = $('section-' + name);
+  if (target) target.classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (name === 'routine') renderRoutine();
+  else if (name === 'progress') renderProgress();
+  else if (name === 'history') renderHistory();
+  else if (name === 'coach') renderCoach();
+  else if (name === 'backup') renderStorageStatus();
+}
+
+// ==================== PROGRESIÓN ====================
+function getExerciseHistory(exId, limit) {
+  limit = limit || 5;
+  var out = [];
+  for (var i=0; i<sessions.length && out.length<limit; i++) {
+    var s = sessions[i];
+    if (!s.exercises) continue;
+    var ex = null;
+    for (var k=0; k<s.exercises.length; k++) {
+      if (s.exercises[k].id === exId) { ex = s.exercises[k]; break; }
+    }
+    if (ex && ex.sets && ex.sets.length) {
+      var valid = [];
+      for (var m=0; m<ex.sets.length; m++) {
+        var set = ex.sets[m];
+        if (set.weight != null && set.reps) valid.push(set);
+      }
+      if (valid.length) {
+        var maxW = 0;
+        for (var n=0; n<valid.length; n++) if (valid[n].weight > maxW) maxW = valid[n].weight;
+        var setsAtTop = [];
+        for (var p=0; p<valid.length; p++) if (valid[p].weight === maxW) setsAtTop.push(valid[p]);
+        out.push({date: s.date, feeling: s.feeling||'', weight: maxW, sets: setsAtTop});
+      }
+    }
+  }
+  return out;
+}
+
+function getRecentFatigue() {
+  if (sessions.length < 2) return 'normal';
+  var f1 = sessions[0].feeling || '';
+  var f2 = sessions[1].feeling || '';
+  var tired = 0, strong = 0;
+  [f1,f2].forEach(function(f){
+    if (f.indexOf('Cansado')>=0 || f.indexOf('Destruido')>=0) tired++;
+    if (f.indexOf('Fuerte')>=0 || f.indexOf('Bestial')>=0) strong++;
+  });
+  if (tired >= 2) return 'tired';
+  if (strong >= 2) return 'strong';
+  return 'normal';
+}
+
+function computeNextTarget(ex) {
+  var hist = getExerciseHistory(ex.id, 5);
+  var fatigue = getRecentFatigue();
+  var jump = WEIGHT_JUMPS[ex.id] || 2.5;
+
+  if (!hist.length) {
+    if (ex.baseline === null) {
+      return {weight:null, reps:ex.repsMin, label:'Explorar', color:'hold', reason:'Primera vez. Encuentra peso retador.'};
+    }
+    return {weight:ex.baseline, reps:ex.repsMin, label:ex.baseline+'kg × '+ex.repsMin, color:'push', reason:'Primera sesión: empieza por rep mínimo.'};
+  }
+
+  var last = hist[0];
+  var lastW = last.weight;
+  var lastSets = last.sets;
+  var setsCount = lastSets.length;
+  var hitsTop = 0, hitsMin = 0;
+  for (var i=0; i<lastSets.length; i++) {
+    if (lastSets[i].reps >= ex.repsMax) hitsTop++;
+    if (lastSets[i].reps >= ex.repsMin) hitsMin++;
+  }
+  var threshold = Math.ceil(setsCount * 0.66);
+  var reachedTop = setsCount > 0 && hitsTop >= threshold;
+  var reachedMin = setsCount > 0 && hitsMin >= threshold;
+
+  // Retroceso
+  if (hist.length >= 2 && hist[1].weight === lastW) {
+    var prevAvg = 0, lastAvg = 0;
+    for (var a=0; a<hist[1].sets.length; a++) prevAvg += hist[1].sets[a].reps;
+    prevAvg /= hist[1].sets.length;
+    for (var b=0; b<lastSets.length; b++) lastAvg += lastSets[b].reps;
+    lastAvg /= lastSets.length;
+    if (lastAvg < prevAvg - 1.5) {
+      return {weight:lastW, reps:ex.repsMax, label:lastW+'kg × '+ex.repsMax, color:'hold',
+              reason:'Bajaste de '+prevAvg.toFixed(1)+' a '+lastAvg.toFixed(1)+' reps. Mantén y recupera.'};
+    }
+  }
+
+  // Estancamiento
+  if (hist.length >= 3 && jump > 0) {
+    var sameW = hist[0].weight === lastW && hist[1].weight === lastW && hist[2].weight === lastW;
+    if (sameW) {
+      var stuck = true;
+      for (var c=0; c<3; c++) {
+        var ht = 0;
+        for (var d=0; d<hist[c].sets.length; d++) if (hist[c].sets[d].reps >= ex.repsMax) ht++;
+        if (ht >= Math.ceil(hist[c].sets.length * 0.66)) { stuck = false; break; }
+      }
+      if (stuck) {
+        var newW = lastW - jump;
+        if (ex.baseline !== null && newW < ex.baseline) newW = lastW;
+        if (newW < lastW) {
+          return {weight:newW, reps:ex.repsMin, label:newW+'kg × '+ex.repsMin, color:'deload',
+                  reason:'3 sesiones atascado en '+lastW+'kg. Baja a '+newW+'kg.'};
+        }
+        return {weight:lastW, reps:ex.repsMax, label:lastW+'kg × '+ex.repsMax, color:'hold',
+                reason:'Estancado en '+lastW+'kg. Concéntrate en técnica.'};
+      }
+    }
+  }
+
+  // Subida
+  if (reachedTop && jump > 0) {
+    var confirmed = false;
+    if (hist.length >= 2 && hist[1].weight === lastW) {
+      var prevHits = 0;
+      for (var e=0; e<hist[1].sets.length; e++) if (hist[1].sets[e].reps >= ex.repsMax) prevHits++;
+      if (prevHits >= Math.ceil(hist[1].sets.length * 0.66)) confirmed = true;
+    }
+    if (confirmed) {
+      if (fatigue === 'tired') {
+        return {weight:lastW, reps:ex.repsMax, label:lastW+'kg × '+ex.repsMax, color:'hold',
+                reason:'Tocaba subir, pero llevas 2 sesiones cansado. Mantén una semana más.'};
+      }
+      var nw = lastW + jump;
+      return {weight:nw, reps:ex.repsMin, label:nw+'kg × '+ex.repsMin, color:'up',
+              reason:'✅ '+lastW+'kg dominado 2 sesiones. Sube a '+nw+'kg, '+ex.repsMin+' reps.'};
+    } else {
+      return {weight:lastW, reps:ex.repsMax, label:lastW+'kg × '+ex.repsMax, color:'push',
+              reason:'Llegaste al tope una vez. Confirma con otra sesión a '+ex.repsMax+' reps.'};
+    }
+  }
+
+  if (reachedMin) {
+    return {weight:lastW, reps:ex.repsMax, label:lastW+'kg × '+ex.repsMax, color:'push',
+            reason:'Apunta a '+ex.repsMax+' reps en mayoría de series.'};
+  }
+
+  return {weight:lastW, reps:ex.repsMin, label:lastW+'kg × '+ex.repsMin, color:'hold',
+          reason:'Aún no consolidas '+ex.repsMin+' reps. Mantén peso.'};
+}
+
+// ==================== RENDER: RUTINA ====================
+function renderRoutine() {
+  var c = $('routineContent'); if (!c) return;
+  var fatigue = getRecentFatigue();
+  var banner = '';
+  if (fatigue === 'tired') {
+    banner = '<div style="background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;color:var(--gold)">⚠️ Últimas 2 sesiones cansado. Subidas pausadas.</div>';
+  } else if (fatigue === 'strong') {
+    banner = '<div style="background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;color:var(--green)">🔥 Vienes fuerte. Buen momento para empujar.</div>';
+  }
+
+  var html = banner;
+  Object.keys(DAYS).forEach(function(dn) {
+    var dd = DAYS[dn];
+    var rowsHtml = '';
+    dd.exercises.forEach(function(ex) {
+      var hist = getExerciseHistory(ex.id, 1);
+      var lw = hist.length ? hist[0].weight : null;
+      var t = computeNextTarget(ex);
+      var lastCell = lw !== null
+        ? '<span style="color:var(--blue);font-family:monospace;font-size:11px">'+lw+'kg</span>'
+        : (ex.baseline !== null ? '<span style="color:var(--muted);font-family:monospace;font-size:11px">'+ex.baseline+'kg</span>' : '<span style="color:#444">—</span>');
+      var range = '<span style="color:var(--muted);font-size:11px;font-family:monospace">'+ex.repsMin+'-'+ex.repsMax+'</span>';
+      rowsHtml += '<tr><td style="font-weight:500">'+ex.name+'</td>'+
+                  '<td style="text-align:center">'+ex.series+'</td>'+
+                  '<td style="text-align:center">'+range+'</td>'+
+                  '<td style="text-align:center">'+lastCell+'</td>'+
+                  '<td><span class="target-pill target-'+t.color+'">'+t.label+'</span><div class="reason-text">'+t.reason+'</div></td></tr>';
+    });
+    html += '<div class="card"><div class="card-title"><span class="day-badge">DÍA '+dn+'</span> '+DAY_LABELS[dn]+'</div>'+
+            '<table class="routine-table"><tr><th style="width:32%">Ejercicio</th><th style="text-align:center">S</th><th style="text-align:center">Rango</th><th style="text-align:center;color:var(--blue)">Último</th><th style="color:var(--green)">Próximo objetivo</th></tr>'+rowsHtml+'</table>'+
+            '<div class="cardio-bar">🚴 LISS Bicicleta — 22 min — FC ~125 ppm</div></div>';
+  });
+  c.innerHTML = html;
+}
+
+// ==================== RENDER: LOG ====================
+function renderExerciseInputs() {
+  var day = $('logDay').value;
+  var c = $('exerciseInputsContainer');
+  var inp = $('exerciseInputs');
+  if (!day) { c.style.display = 'none'; return; }
+  c.style.display = 'block';
+  var d = DAYS[day];
+  var html = '';
+  d.exercises.forEach(function(ex) {
+    var n = ex.series || 3;
+    var t = computeNextTarget(ex);
+    var ph = t.weight !== null ? t.weight : (ex.baseline || '');
+    var rph = t.reps || ex.repsMin;
+    var rows = '';
+    for (var i=0; i<n; i++) {
+      rows += '<div class="series-row"><div class="series-num">S'+(i+1)+'</div>'+
+              '<div class="input-col"><input type="number" id="ex_'+ex.id+'_s'+i+'" placeholder="'+ph+'" step="0.5" min="0"><div class="input-label-small">KG</div></div>'+
+              '<div class="input-col"><input type="number" id="reps_'+ex.id+'_s'+i+'" placeholder="'+rph+'" step="1" min="0"><div class="input-label-small">REPS</div></div></div>';
+    }
+    html += '<div class="exercise-block"><div class="exercise-block-header"><div style="display:flex;flex-direction:column;flex:1"><span class="exercise-name-log">'+ex.name+'</span><span class="exercise-target">🎯 '+t.label+'</span></div><span class="exercise-meta">'+n+'×'+ex.repsMin+'-'+ex.repsMax+'</span></div><div class="series-rows">'+rows+'</div></div>';
+  });
+  inp.innerHTML = html;
+}
+
+function saveSession() {
+  var day = $('logDay').value;
+  var date = $('logDate').value;
+  var notes = $('logNotes').value;
+  if (!day || !date) { showToast('⚠️ Selecciona fecha y día', '#e63946'); return; }
+  var d = DAYS[day];
+  var exercises = d.exercises.map(function(ex) {
+    var n = ex.series || 3;
+    var sets = [];
+    for (var i=0; i<n; i++) {
+      var wEl = $('ex_'+ex.id+'_s'+i);
+      var rEl = $('reps_'+ex.id+'_s'+i);
+      sets.push({
+        weight: wEl ? (parseFloat(wEl.value) || null) : null,
+        reps: rEl ? (parseInt(rEl.value) || null) : null
+      });
+    }
+    var ws = sets.map(function(s){return s.weight;}).filter(function(w){return w;});
+    return {id:ex.id, name:ex.name, sets:sets, weight: ws.length ? Math.max.apply(null,ws) : null, baseline:ex.baseline};
+  });
+  var session = {day:day, dayName:d.name, date:date, feeling:selectedFeeling, notes:notes, exercises:exercises, id:Date.now()};
+  sessions.unshift(session);
+  sessions.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  if (!saveToStorage()) { sessions = sessions.filter(function(s){return s.id !== session.id;}); return; }
+  updateHeader();
+  renderRoutine();
+  showToast('✅ Sesión guardada');
+  $('logDay').value = '';
+  $('logNotes').value = '';
+  $('exerciseInputsContainer').style.display = 'none';
+  document.querySelectorAll('.feeling-btn').forEach(function(b){ b.classList.remove('selected'); });
+  selectedFeeling = '';
+}
+
+// ==================== RENDER: PROGRESO ====================
+function getPersonalBests() {
+  var p = {};
+  sessions.forEach(function(s){
+    if (!s.exercises) return;
+    s.exercises.forEach(function(ex){
+      if (ex.weight && (!p[ex.id] || ex.weight > p[ex.id])) p[ex.id] = ex.weight;
+    });
+  });
+  return p;
+}
+
+function renderProgress() {
+  var c = $('progressContent'); if (!c) return;
+  var p = getPersonalBests();
+  var ls = sessions[0];
+  var seen = {};
+  var kx = [];
+  Object.keys(DAYS).forEach(function(dn){
+    DAYS[dn].exercises.forEach(function(ex){
+      if (ex.baseline !== null && !seen[ex.id]) { seen[ex.id] = true; kx.push(ex); }
+    });
+  });
+  var rows = kx.map(function(ex){
+    var pb = p[ex.id] || ex.baseline;
+    var dif = pb - ex.baseline;
+    return '<tr><td>'+ex.name+'</td><td style="font-family:monospace;color:var(--muted)">'+ex.baseline+'kg</td><td style="font-family:monospace;color:var(--blue);font-weight:600">'+pb+'kg</td><td>'+(dif>0?'<span class="arrow-up">▲ +'+dif+'kg</span>':'<span class="arrow-same">— base</span>')+'</td></tr>';
+  }).join('');
+  c.innerHTML = '<div class="progress-grid"><div class="stat-card"><div class="stat-label">Sesiones</div><div class="stat-value">'+sessions.length+'</div><div class="stat-sub">totales</div></div><div class="stat-card"><div class="stat-label">Última</div><div class="stat-value" style="font-size:22px">'+(ls?formatDate(ls.date):'—')+'</div><div class="stat-sub">'+(ls?'Día '+ls.day+' — '+ls.dayName:'—')+'</div></div></div><div class="card"><div class="card-title">🏆 RÉCORDS</div><table class="prog-table"><tr><th>Ejercicio</th><th>Base</th><th>Mejor</th><th>Mejora</th></tr>'+rows+'</table></div>';
+}
+
+// ==================== RENDER: HISTORIAL ====================
+function renderHistory() {
+  var c = $('historyContent'); if (!c) return;
+  if (!sessions.length) { c.innerHTML = '<div class="empty-state">📭 Sin sesiones aún.</div>'; return; }
+  c.innerHTML = sessions.map(function(s){
+    var blocks = (s.exercises||[]).map(function(ex){
+      var sh = '';
+      if (ex.sets && ex.sets.length) {
+        var pills = ex.sets.map(function(set,i){
+          var kg = set.weight ? set.weight+'kg' : '—';
+          var rp = set.reps ? '×'+set.reps : '';
+          var hd = set.weight || set.reps;
+          return '<span style="display:inline-block;background:'+(hd?'var(--dark)':'#1a1a1a')+';border:1px solid '+(hd?'#333':'#222')+';border-radius:5px;padding:3px 8px;font-family:monospace;font-size:11px;color:'+(hd?'var(--blue)':'#333')+';margin:2px 3px 2px 0"><span style="color:#444;font-size:10px">S'+(i+1)+' </span>'+kg+rp+'</span>';
+        }).join('');
+        sh = '<div style="margin-top:5px;line-height:1.8">'+pills+'</div>';
+      } else if (ex.weight) {
+        sh = '<div style="margin-top:4px;font-family:monospace;font-size:12px;color:var(--blue)">'+ex.weight+'kg</div>';
+      }
+      return '<div style="padding:10px 12px;border-bottom:1px solid #1a1a1a"><span style="font-size:13px;font-weight:500">'+ex.name+'</span>'+sh+'</div>';
+    }).join('');
+    return '<div class="history-entry"><div style="padding:14px 16px;background:var(--dark4);display:flex;justify-content:space-between;align-items:center"><div><div class="history-day">Día '+s.day+' — '+s.dayName+'</div><div class="history-date">'+formatDate(s.date)+(s.feeling?' · '+s.feeling:'')+'</div></div><div style="font-size:12px;color:var(--muted)">'+(s.exercises||[]).length+' ej.</div></div>'+blocks+(s.notes?'<div style="padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic">💬 '+s.notes+'</div>':'')+'</div>';
+  }).join('');
+}
+
+// ==================== RENDER: COACH ====================
+function renderCoach() {
+  var c = $('coachContent'); if (!c) return;
+  var t = sessions.length;
+  var fatigue = getRecentFatigue();
+  var allEx = [];
+  Object.keys(DAYS).forEach(function(dn){ DAYS[dn].exercises.forEach(function(ex){ allEx.push(ex); }); });
+  var groups = {up:[], push:[], hold:[], deload:[]};
+  allEx.forEach(function(ex){
+    if (!getExerciseHistory(ex.id, 1).length) return;
+    var tg = computeNextTarget(ex);
+    if (groups[tg.color]) groups[tg.color].push({ex:ex, target:tg});
+  });
+  var fmsg = '';
+  if (fatigue === 'tired') fmsg = '<div style="margin-top:10px;color:var(--gold)">⚠️ Fatiga detectada. Progresión pausada.</div>';
+  else if (fatigue === 'strong') fmsg = '<div style="margin-top:10px;color:var(--green)">🔥 Buen momento para empujar.</div>';
+  
+  var html = '<div class="coach-card"><div class="coach-title">💬 ESTADO</div><div class="coach-msg">'+(t===0?'Registra tu primer entreno.':'Llevas <strong>'+t+' sesiones</strong>. Objetivo: 91 → 80 kg sin perder músculo.')+fmsg+'</div></div>';
+  
+  function section(title, color, items) {
+    if (!items.length) return '';
+    return '<div class="card"><div class="card-title" style="color:'+color+'">'+title+'</div>'+items.map(function(x){
+      return '<div class="coach-tip" style="border-left-color:'+color+'"><strong>'+x.ex.name+'</strong> → '+x.target.label+'<br><span style="color:var(--muted);font-size:12px">'+x.target.reason+'</span></div>';
+    }).join('')+'</div>';
+  }
+  html += section('↑ TOCA SUBIR', 'var(--green)', groups.up);
+  html += section('→ EMPUJAR REPS', 'var(--blue)', groups.push);
+  html += section('= MANTENER', 'var(--gold)', groups.hold);
+  html += section('↓ DESCARGA', 'var(--red)', groups.deload);
+  c.innerHTML = html;
+}
+
+// ==================== BACKUP ====================
+function exportData() {
+  var box = $('exportBox');
+  var ta = $('exportText');
+  ta.value = JSON.stringify(sessions, null, 2);
+  box.style.display = 'block';
+  showToast('✅ Datos listos');
+}
+
+function copyExportText() {
+  var ta = $('exportText');
+  try {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(ta.value).then(function(){ showToast('✅ Copiado'); });
+    } else {
+      ta.select(); document.execCommand('copy'); showToast('✅ Copiado');
+    }
+  } catch(e) { showToast('❌ No se pudo copiar', '#e63946'); }
+}
+
+function importFromText() {
+  var raw = $('importText').value.trim();
+  if (!raw) { showToast('⚠️ Pega el JSON primero', '#f4a261'); return; }
+  try {
+    var p = JSON.parse(raw);
+    var imp = Array.isArray(p) ? p : (p && Array.isArray(p.sessions) ? p.sessions : null);
+    if (!imp) throw new Error('Formato inválido');
+    sessions = imp;
+    sessions.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+    if (saveToStorage()) {
+      $('importText').value = '';
+      updateHeader();
+      renderRoutine();
+      renderStorageStatus();
+      showToast('✅ '+sessions.length+' sesiones importadas');
+    }
+  } catch(e) {
+    showToast('❌ Error: '+e.message, '#e63946');
+  }
+}
+
+function clearAllData() {
+  if (!confirm('¿Borrar todo? No se puede deshacer.')) return;
+  sessions = [];
+  saveToStorage();
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  updateHeader();
+  renderRoutine();
+  renderStorageStatus();
+  showToast('🗑️ Borrado');
+}
+
+function renderStorageStatus() {
+  var el = $('storageStatus'); if (!el) return;
+  var st = '❌ No disponible';
+  try {
+    var l = localStorage.getItem(STORAGE_KEY);
+    st = l ? '✅ OK — '+JSON.parse(l).length+' sesiones' : '⚠️ Vacío';
+  } catch(e) {}
+  el.innerHTML = '<div style="display:flex;justify-content:space-between"><span>💾 Local</span><span style="color:var(--text)">'+st+'</span></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span>🏋️ En memoria</span><span style="color:var(--text)">'+sessions.length+' sesiones</span></div>';
+}
+
+// ==================== INIT ====================
+function init() {
+  // Botones de pestañas
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      showTab(tab.getAttribute('data-section'), tab);
+    });
+  });
+  // Feeling buttons
+  document.querySelectorAll('.feeling-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.feeling-btn').forEach(function(b){b.classList.remove('selected');});
+      btn.classList.add('selected');
+      selectedFeeling = btn.getAttribute('data-feeling');
+    });
+  });
+  // Día change
+  $('logDay').addEventListener('change', renderExerciseInputs);
+  // Botones
+  $('saveSessionBtn').addEventListener('click', saveSession);
+  $('exportBtn').addEventListener('click', exportData);
+  $('copyExportBtn').addEventListener('click', copyExportText);
+  $('importBtn').addEventListener('click', importFromText);
+  $('clearBtn').addEventListener('click', clearAllData);
+  // Fecha por defecto
+  try { $('logDate').valueAsDate = new Date(); } catch(e){}
+  // Cargar
+  loadFromStorage();
+  updateHeader();
+  renderRoutine();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 
 </body>
