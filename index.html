@@ -1,10 +1,10 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSCAR — Entrenador Personal</title>
+<title>COLISEUM FITNESS — Oscar</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
   :root{--red:#e63946;--dark:#0d0d0d;--dark2:#161616;--dark3:#1f1f1f;--dark4:#2a2a2a;--gold:#f4a261;--green:#52b788;--blue:#4cc9f0;--text:#e8e8e8;--muted:#888;--border:#2a2a2a}
@@ -96,7 +96,25 @@
 <body>
 <div id="errorBox"></div>
 <header>
-  <div class="logo">OSCAR <span>/ ENTRENA</span></div>
+  <div class="logo" style="display:flex;align-items:center;gap:10px">
+    <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+      <rect x="4" y="52" width="56" height="4" fill="#e63946"/>
+      <path d="M6 52 L6 18 Q6 14 10 14 L54 14 Q58 14 58 18 L58 52" stroke="#e63946" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M10 52 L10 42 Q10 38 14 38 Q18 38 18 42 L18 52" stroke="#e63946" stroke-width="2" fill="none"/>
+      <path d="M22 52 L22 42 Q22 38 26 38 Q30 38 30 42 L30 52" stroke="#e63946" stroke-width="2" fill="none"/>
+      <path d="M34 52 L34 42 Q34 38 38 38 Q42 38 42 42 L42 52" stroke="#e63946" stroke-width="2" fill="none"/>
+      <path d="M46 52 L46 42 Q46 38 50 38 Q54 38 54 42 L54 52" stroke="#e63946" stroke-width="2" fill="none"/>
+      <line x1="6" y1="35" x2="58" y2="35" stroke="#e63946" stroke-width="1.5"/>
+      <path d="M10 35 L10 28 Q10 25 13 25 Q16 25 16 28 L16 35" stroke="#e63946" stroke-width="1.8" fill="none"/>
+      <path d="M20 35 L20 28 Q20 25 23 25 Q26 25 26 28 L26 35" stroke="#e63946" stroke-width="1.8" fill="none"/>
+      <path d="M30 35 L30 28 Q30 25 33 25 Q36 25 36 28 L36 35" stroke="#e63946" stroke-width="1.8" fill="none"/>
+      <path d="M40 35 L40 28 Q40 25 43 25 Q46 25 46 28 L46 35" stroke="#e63946" stroke-width="1.8" fill="none"/>
+      <path d="M50 35 L50 28 Q50 25 53 25 Q56 25 56 28 L56 35" stroke="#e63946" stroke-width="1.8" fill="none"/>
+      <line x1="6" y1="22" x2="58" y2="22" stroke="#e63946" stroke-width="1.5"/>
+      <path d="M52 14 L52 8 L56 8 L56 11 L58 11 L58 14" stroke="#e63946" stroke-width="2" fill="none"/>
+    </svg>
+    <span style="white-space:nowrap">COLISEUM <span style="color:var(--text)">FITNESS</span></span>
+  </div>
   <div class="header-info">
     <div class="weight-badge">91 → 80 kg</div>
     <div style="font-size:12px" id="sessionCount">0 sesiones</div>
@@ -227,36 +245,38 @@ window.addEventListener('error', function(e) {
 // ==================== DATOS ====================
 var DAYS = {
   '1': {name:'Torso A', exercises:[
-    {id:'press_banca', name:'Press banca plano', baseline:60, series:4, repsMin:5, repsMax:6},
-    {id:'remo_t', name:'Remo máquina T', baseline:30, series:3, repsMin:8, repsMax:10},
-    {id:'press_inclinado', name:'Press inclinado mancuernas', baseline:25, series:3, repsMin:8, repsMax:12},
-    {id:'jalon_pecho', name:'Jalón al pecho', baseline:60, series:3, repsMin:8, repsMax:12},
-    {id:'curl_scott', name:'Curl Scott barra Z', baseline:20, series:3, repsMin:8, repsMax:12},
-    {id:'curl_alterno', name:'Curl martillo mancuernas', baseline:20, series:3, repsMin:10, repsMax:15},
-    {id:'plancha_peso', name:'Plancha con peso', baseline:null, series:3, repsMin:30, repsMax:45}
+    {id:'press_banca', name:'Press banca plano', baseline:60, series:4, repsMin:5, repsMax:6, rest:'3-4 min'},
+    {id:'jalon_pecho', name:'Jalón al pecho', baseline:60, series:3, repsMin:8, repsMax:12, rest:'2 min'},
+    {id:'press_inclinado', name:'Press inclinado mancuernas', baseline:25, series:3, repsMin:8, repsMax:12, rest:'2 min'},
+    {id:'remo_t', name:'Remo máquina T', baseline:30, series:3, repsMin:8, repsMax:10, rest:'2 min'},
+    {id:'curl_scott', name:'Curl Scott barra Z', baseline:20, series:3, repsMin:8, repsMax:12, rest:'90 s'},
+    {id:'curl_alterno', name:'Curl martillo mancuernas', baseline:20, series:3, repsMin:10, repsMax:15, rest:'90 s'},
+    {id:'plancha_peso', name:'Plancha con peso', baseline:null, series:3, repsMin:30, repsMax:45, rest:'45 s'}
   ]},
   '2': {name:'Pierna A', exercises:[
-    {id:'incline_squat', name:'Incline Squat', baseline:80, series:4, repsMin:5, repsMax:6},
-    {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5},
-    {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10},
-    {id:'aductor', name:'Aductor máquina', baseline:null, series:3, repsMin:12, repsMax:15},
-    {id:'abduccion', name:'Abducción cadera', baseline:null, series:3, repsMin:12, repsMax:15},
-    {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10}
+    {id:'activacion_cuad', name:'Activación: ext cuádriceps ligero', baseline:null, series:2, repsMin:15, repsMax:15, rest:'60 s', isActivation:true},
+    {id:'incline_squat', name:'Incline Squat (máquina)', baseline:80, series:4, repsMin:5, repsMax:6, rest:'3-4 min'},
+    {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5, rest:'3-4 min'},
+    {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'aductor', name:'Aductor máquina', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
+    {id:'abduccion', name:'Abducción cadera', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
+    {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10, rest:'45 s'}
   ]},
   '3': {name:'Torso B', exercises:[
-    {id:'remo_polea', name:'Remo polea baja', baseline:70, series:3, repsMin:8, repsMax:10},
-    {id:'jalon_abierto', name:'Jalón abierto', baseline:70, series:3, repsMin:8, repsMax:10},
-    {id:'press_declinado', name:'Press declinado', baseline:60, series:3, repsMin:8, repsMax:10},
-    {id:'ext_triceps', name:'Extensión tríceps', baseline:50, series:3, repsMin:10, repsMax:12},
-    {id:'face_pull', name:'Face pull', baseline:22.5, series:3, repsMin:12, repsMax:15},
-    {id:'pallof', name:'Pallof Press', baseline:null, series:3, repsMin:10, repsMax:10}
+    {id:'remo_polea', name:'Remo polea baja', baseline:70, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'press_declinado', name:'Press declinado', baseline:60, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'jalon_abierto', name:'Jalón abierto', baseline:70, series:3, repsMin:8, repsMax:10, rest:'2 min'},
+    {id:'ext_triceps', name:'Extensión tríceps cabeza', baseline:50, series:3, repsMin:10, repsMax:12, rest:'90 s'},
+    {id:'face_pull', name:'Face pull', baseline:22.5, series:3, repsMin:12, repsMax:15, rest:'60 s'},
+    {id:'pallof', name:'Pallof Press', baseline:null, series:3, repsMin:10, repsMax:10, rest:'45 s'}
   ]},
   '4': {name:'Pierna B', exercises:[
-    {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8},
-    {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8},
-    {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10},
-    {id:'ext_cuadriceps', name:'Extensión cuádriceps', baseline:70, series:3, repsMin:10, repsMax:12},
-    {id:'curl_femoral', name:'Curl femoral', baseline:42.5, series:3, repsMin:8, repsMax:10}
+    {id:'activacion_fem', name:'Activación: curl femoral ligero', baseline:null, series:2, repsMin:12, repsMax:12, rest:'60 s', isActivation:true},
+    {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8, rest:'3-4 min'},
+    {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8, rest:'2-3 min'},
+    {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'curl_femoral', name:'Curl femoral tumbado', baseline:42.5, series:3, repsMin:8, repsMax:10, rest:'90 s'},
+    {id:'ext_cuadriceps', name:'Extensión cuádriceps', baseline:70, series:3, repsMin:10, repsMax:12, rest:'90 s'}
   ]}
 };
 
@@ -265,7 +285,8 @@ var WEIGHT_JUMPS = {
   curl_alterno:2, plancha_peso:0, incline_squat:5, peso_muerto:5, prensa:10,
   aductor:2.5, abduccion:2.5, dead_bug:0, remo_polea:2.5, jalon_abierto:2.5,
   press_declinado:2.5, ext_triceps:2.5, face_pull:2.5, pallof:2.5,
-  sentadilla_libre:2.5, rdl:2.5, prensa_d4:5, ext_cuadriceps:2.5, curl_femoral:2.5
+  sentadilla_libre:2.5, rdl:2.5, prensa_d4:5, ext_cuadriceps:2.5, curl_femoral:2.5,
+  activacion_cuad:0, activacion_fem:0
 };
 
 var DAY_LABELS = {'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
@@ -483,14 +504,19 @@ function renderRoutine() {
         ? '<span style="color:var(--blue);font-family:monospace;font-size:11px">'+lw+'kg</span>'
         : (ex.baseline !== null ? '<span style="color:var(--muted);font-family:monospace;font-size:11px">'+ex.baseline+'kg</span>' : '<span style="color:#444">—</span>');
       var range = '<span style="color:var(--muted);font-size:11px;font-family:monospace">'+ex.repsMin+'-'+ex.repsMax+'</span>';
-      rowsHtml += '<tr><td style="font-weight:500">'+ex.name+'</td>'+
+      var restCell = '<span style="color:var(--gold);font-size:11px;font-family:monospace">'+(ex.rest||'—')+'</span>';
+      var nameCell = ex.isActivation
+        ? '<span style="font-weight:500;color:#aaa;font-style:italic">'+ex.name+'</span>'
+        : '<span style="font-weight:500">'+ex.name+'</span>';
+      rowsHtml += '<tr><td>'+nameCell+'</td>'+
                   '<td style="text-align:center">'+ex.series+'</td>'+
                   '<td style="text-align:center">'+range+'</td>'+
+                  '<td style="text-align:center">'+restCell+'</td>'+
                   '<td style="text-align:center">'+lastCell+'</td>'+
                   '<td><span class="target-pill target-'+t.color+'">'+t.label+'</span><div class="reason-text">'+t.reason+'</div></td></tr>';
     });
     html += '<div class="card"><div class="card-title"><span class="day-badge">DÍA '+dn+'</span> '+DAY_LABELS[dn]+'</div>'+
-            '<table class="routine-table"><tr><th style="width:32%">Ejercicio</th><th style="text-align:center">S</th><th style="text-align:center">Rango</th><th style="text-align:center;color:var(--blue)">Último</th><th style="color:var(--green)">Próximo objetivo</th></tr>'+rowsHtml+'</table>'+
+            '<table class="routine-table"><tr><th style="width:28%">Ejercicio</th><th style="text-align:center">S</th><th style="text-align:center">Reps</th><th style="text-align:center;color:var(--gold)">Descanso</th><th style="text-align:center;color:var(--blue)">Último</th><th style="color:var(--green)">Próximo objetivo</th></tr>'+rowsHtml+'</table>'+
             '<div class="cardio-bar">🚴 LISS Bicicleta — 22 min — FC ~125 ppm</div></div>';
   });
   c.innerHTML = html;
@@ -516,7 +542,7 @@ function renderExerciseInputs() {
               '<div class="input-col"><input type="number" id="ex_'+ex.id+'_s'+i+'" placeholder="'+ph+'" step="0.5" min="0"><div class="input-label-small">KG</div></div>'+
               '<div class="input-col"><input type="number" id="reps_'+ex.id+'_s'+i+'" placeholder="'+rph+'" step="1" min="0"><div class="input-label-small">REPS</div></div></div>';
     }
-    html += '<div class="exercise-block"><div class="exercise-block-header"><div style="display:flex;flex-direction:column;flex:1"><span class="exercise-name-log">'+ex.name+'</span><span class="exercise-target">🎯 '+t.label+'</span></div><span class="exercise-meta">'+n+'×'+ex.repsMin+'-'+ex.repsMax+'</span></div><div class="series-rows">'+rows+'</div></div>';
+    html += '<div class="exercise-block"><div class="exercise-block-header"><div style="display:flex;flex-direction:column;flex:1"><span class="exercise-name-log">'+ex.name+'</span><span class="exercise-target">🎯 '+t.label+'</span></div><span class="exercise-meta">'+n+'×'+ex.repsMin+'-'+ex.repsMax+'<br><span style="color:var(--gold)">⏱ '+(ex.rest||'—')+'</span></span></div><div class="series-rows">'+rows+'</div></div>';
   });
   inp.innerHTML = html;
 }
