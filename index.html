@@ -212,11 +212,15 @@
   <div class="card">
     <div class="card-title">➕ AÑADIR COMIDA</div>
     <div class="form-group" style="margin-bottom:10px">
-      <label>¿Qué has comido?</label>
-      <textarea id="mealInput" placeholder="Ej: pechuga de pollo a la plancha 200g, 5 patatas pequeñas cocidas, 2 huevos" style="min-height:64px"></textarea>
+      <label>Alimento</label>
+      <select id="foodSelect"><option value="">Selecciona...</option></select>
     </div>
-    <button type="button" class="btn" id="estimateMealBtn">🤖 CALCULAR Y AÑADIR</button>
-    <div id="mealEstimateBox" style="display:none;margin-top:12px;background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:14px"></div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>Cantidad (<span id="foodUnit">g</span>)</label>
+      <input type="number" id="foodQty" step="1" min="0" placeholder="200">
+    </div>
+    <div id="foodPreview" style="display:none;font-size:12px;color:var(--muted);font-family:monospace;margin-bottom:10px"></div>
+    <button type="button" class="btn" id="addFoodBtn">➕ AÑADIR AL DÍA</button>
   </div>
   <div class="card">
     <div class="card-title">📋 HOY (<span id="nutriTodayDate">—</span>)</div>
@@ -873,56 +877,90 @@ function saveWeight() {
   showToast('✅ Peso guardado');
 }
 
-function estimateMeal() {
-  var desc = $('mealInput').value.trim();
-  if (!desc) { showToast('⚠️ Escribe qué has comido', '#f4a261'); return; }
-  var box = $('mealEstimateBox');
-  box.style.display = 'block';
-  box.innerHTML = '<div style="color:var(--muted);font-size:13px">🤖 Calculando...</div>';
+// Base de alimentos. unit: 'g' (valores por 100g) o 'ud' (valores por unidad)
+var FOODS = [
+  {id:'pollo', name:'Pechuga de pollo', unit:'g', kcal:165, prot:31},
+  {id:'pavo', name:'Pechuga de pavo', unit:'g', kcal:135, prot:29},
+  {id:'ternera_picada', name:'Carne picada ternera', unit:'g', kcal:215, prot:26},
+  {id:'cerdo_lomo', name:'Lomo de cerdo', unit:'g', kcal:165, prot:27},
+  {id:'merluza', name:'Merluza', unit:'g', kcal:90, prot:18},
+  {id:'salmon', name:'Salmón', unit:'g', kcal:208, prot:20},
+  {id:'atun_lata', name:'Atún en lata (escurrido)', unit:'g', kcal:115, prot:26},
+  {id:'calamar_plancha', name:'Calamar a la plancha', unit:'g', kcal:92, prot:16},
+  {id:'huevo', name:'Huevo (mediano)', unit:'ud', kcal:70, prot:6},
+  {id:'clara', name:'Clara de huevo', unit:'ud', kcal:17, prot:3.6},
+  {id:'arroz_cocido', name:'Arroz cocido', unit:'g', kcal:130, prot:2.7},
+  {id:'pasta_cocida', name:'Pasta cocida', unit:'g', kcal:155, prot:5.5},
+  {id:'patata_cocida', name:'Patata cocida', unit:'g', kcal:87, prot:2},
+  {id:'patata_peq', name:'Patata pequeña cocida (ud)', unit:'ud', kcal:50, prot:1.2},
+  {id:'pan', name:'Pan (rebanada/trozo)', unit:'g', kcal:265, prot:9},
+  {id:'avena', name:'Avena (en seco)', unit:'g', kcal:380, prot:13},
+  {id:'yogur_griego', name:'Yogur griego natural', unit:'g', kcal:97, prot:9},
+  {id:'leche', name:'Leche semidesnatada', unit:'g', kcal:46, prot:3.3},
+  {id:'queso_fresco', name:'Queso fresco batido', unit:'g', kcal:60, prot:8},
+  {id:'lentejas', name:'Lentejas cocidas', unit:'g', kcal:115, prot:9},
+  {id:'garbanzos', name:'Garbanzos cocidos', unit:'g', kcal:165, prot:9},
+  {id:'aceite', name:'Aceite de oliva', unit:'g', kcal:884, prot:0},
+  {id:'platano', name:'Plátano (ud)', unit:'ud', kcal:105, prot:1.3},
+  {id:'manzana', name:'Manzana (ud)', unit:'ud', kcal:80, prot:0.4},
+  {id:'almendras', name:'Almendras', unit:'g', kcal:580, prot:21},
+  {id:'whey', name:'Proteína whey (cazo ~30g)', unit:'ud', kcal:120, prot:24},
+  {id:'tarta_prot', name:'Tarta de proteína (porción)', unit:'ud', kcal:250, prot:20},
+  {id:'cafe_solo', name:'Café solo', unit:'ud', kcal:5, prot:0},
+  {id:'cafe_leche', name:'Café con leche', unit:'ud', kcal:60, prot:3},
+  {id:'bocata_calamares', name:'Bocata de calamares', unit:'ud', kcal:600, prot:22},
+  {id:'cerveza', name:'Cerveza (caña/tercio)', unit:'ud', kcal:130, prot:1}
+];
 
-  var prompt = 'Eres un nutricionista. Estima las calorías totales y los gramos de proteína totales de esta comida. Responde SOLO con un objeto JSON, sin texto adicional, sin markdown, con este formato exacto: {"kcal": numero, "prot": numero, "nota": "texto breve opcional"}. Comida: '+desc;
+function getFood(id) {
+  for (var i=0; i<FOODS.length; i++) if (FOODS[i].id === id) return FOODS[i];
+  return null;
+}
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var text = '';
-    if (data.content) {
-      for (var i=0; i<data.content.length; i++) {
-        if (data.content[i].type === 'text') text += data.content[i].text;
-      }
-    }
-    var clean = text.replace(/```json/g,'').replace(/```/g,'').trim();
-    var est = JSON.parse(clean);
-    var kcal = Math.round(est.kcal || 0);
-    var prot = Math.round(est.prot || 0);
-    box.innerHTML = '<div style="font-size:14px;margin-bottom:8px">📊 Estimación:</div>'+
-      '<div style="display:flex;gap:16px;margin-bottom:8px"><span style="font-family:monospace;color:var(--gold)">'+kcal+' kcal</span><span style="font-family:monospace;color:var(--green)">'+prot+'g proteína</span></div>'+
-      (est.nota ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:10px">'+est.nota+'</div>' : '')+
-      '<button type="button" id="confirmMealBtn" class="btn" style="font-size:14px;background:var(--green)">✅ AÑADIR AL DÍA</button>';
-    $('confirmMealBtn').addEventListener('click', function(){
-      var d = loadNutri();
-      var t = todayStr();
-      if (!d[t]) d[t] = [];
-      d[t].push({ desc: desc, kcal: kcal, prot: prot });
-      saveNutri(d);
-      $('mealInput').value = '';
-      box.style.display = 'none';
-      box.innerHTML = '';
-      renderNutrition();
-      showToast('✅ Comida añadida');
-    });
-  })
-  .catch(function(e){
-    box.innerHTML = '<div style="color:var(--red);font-size:13px">❌ No se pudo calcular. ¿Tienes internet?<br><span style="color:var(--muted);font-size:11px">'+e.message+'</span></div>';
+function populateFoodSelect() {
+  var sel = $('foodSelect'); if (!sel) return;
+  var html = '<option value="">Selecciona...</option>';
+  FOODS.forEach(function(f){
+    var per = f.unit === 'g' ? '/100g' : '/ud';
+    html += '<option value="'+f.id+'">'+f.name+' ('+f.kcal+' kcal'+per+')</option>';
   });
+  sel.innerHTML = html;
+}
+
+function updateFoodPreview() {
+  var f = getFood($('foodSelect').value);
+  var unitEl = $('foodUnit');
+  var prev = $('foodPreview');
+  if (!f) { if(prev) prev.style.display='none'; return; }
+  if (unitEl) unitEl.textContent = f.unit === 'g' ? 'g' : 'unidades';
+  var qty = parseFloat($('foodQty').value);
+  if (!qty || qty <= 0) { prev.style.display='none'; return; }
+  var factor = f.unit === 'g' ? qty/100 : qty;
+  var kcal = Math.round(f.kcal * factor);
+  var prot = Math.round(f.prot * factor * 10) / 10;
+  prev.style.display = 'block';
+  prev.textContent = '≈ ' + kcal + ' kcal · ' + prot + 'g proteína';
+}
+
+function addFood() {
+  var f = getFood($('foodSelect').value);
+  if (!f) { showToast('⚠️ Elige un alimento', '#f4a261'); return; }
+  var qty = parseFloat($('foodQty').value);
+  if (!qty || qty <= 0) { showToast('⚠️ Pon la cantidad', '#f4a261'); return; }
+  var factor = f.unit === 'g' ? qty/100 : qty;
+  var kcal = Math.round(f.kcal * factor);
+  var prot = Math.round(f.prot * factor * 10) / 10;
+  var desc = f.name + ' — ' + qty + (f.unit === 'g' ? 'g' : ' ud');
+  var d = loadNutri();
+  var t = todayStr();
+  if (!d[t]) d[t] = [];
+  d[t].push({ desc: desc, kcal: kcal, prot: prot });
+  saveNutri(d);
+  $('foodSelect').value = '';
+  $('foodQty').value = '';
+  $('foodPreview').style.display = 'none';
+  renderNutrition();
+  showToast('✅ ' + f.name + ' añadido');
 }
 
 // ==================== INIT ====================
@@ -950,7 +988,10 @@ function init() {
   $('importBtn').addEventListener('click', importFromText);
   $('clearBtn').addEventListener('click', clearAllData);
   // Nutrición
-  var emb = $('estimateMealBtn'); if (emb) emb.addEventListener('click', estimateMeal);
+  populateFoodSelect();
+  var fs = $('foodSelect'); if (fs) fs.addEventListener('change', updateFoodPreview);
+  var fq = $('foodQty'); if (fq) fq.addEventListener('input', updateFoodPreview);
+  var afb = $('addFoodBtn'); if (afb) afb.addEventListener('click', addFood);
   var swb = $('saveWeightBtn'); if (swb) swb.addEventListener('click', saveWeight);
   // Fecha por defecto
   try { $('logDate').valueAsDate = new Date(); } catch(e){}
