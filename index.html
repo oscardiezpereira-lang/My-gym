@@ -212,15 +212,22 @@
   <div class="card">
     <div class="card-title">➕ AÑADIR COMIDA</div>
     <div class="form-group" style="margin-bottom:10px">
-      <label>Alimento</label>
-      <select id="foodSelect"><option value="">Selecciona...</option></select>
+      <label>Buscar alimento</label>
+      <input type="text" id="foodSearch" placeholder="Escribe: pollo, boniato, pizza..." autocomplete="off">
+      <div id="foodResults" style="margin-top:6px;max-height:220px;overflow-y:auto"></div>
     </div>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>Cantidad (<span id="foodUnit">g</span>)</label>
-      <input type="number" id="foodQty" step="1" min="0" placeholder="200">
+    <div id="foodChosen" style="display:none">
+      <div style="background:var(--dark3);border:1px solid var(--red);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px">
+        <span id="foodChosenName" style="color:var(--text);font-weight:500"></span>
+        <span id="foodChosenInfo" style="color:var(--muted);font-size:11px;font-family:monospace;display:block;margin-top:2px"></span>
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Cantidad (<span id="foodUnit">g</span>)</label>
+        <input type="number" id="foodQty" step="1" min="0" placeholder="200">
+      </div>
+      <div id="foodPreview" style="display:none;font-size:12px;color:var(--gold);font-family:monospace;margin-bottom:10px"></div>
+      <button type="button" class="btn" id="addFoodBtn">➕ AÑADIR AL DÍA</button>
     </div>
-    <div id="foodPreview" style="display:none;font-size:12px;color:var(--muted);font-family:monospace;margin-bottom:10px"></div>
-    <button type="button" class="btn" id="addFoodBtn">➕ AÑADIR AL DÍA</button>
   </div>
   <div class="card">
     <div class="card-title">📋 HOY (<span id="nutriTodayDate">—</span>)</div>
@@ -879,88 +886,209 @@ function saveWeight() {
 
 // Base de alimentos. unit: 'g' (valores por 100g) o 'ud' (valores por unidad)
 var FOODS = [
-  {id:'pollo', name:'Pechuga de pollo', unit:'g', kcal:165, prot:31},
-  {id:'pavo', name:'Pechuga de pavo', unit:'g', kcal:135, prot:29},
-  {id:'ternera_picada', name:'Carne picada ternera', unit:'g', kcal:215, prot:26},
-  {id:'cerdo_lomo', name:'Lomo de cerdo', unit:'g', kcal:165, prot:27},
+  // ---- AVES ----
+  {id:'pollo_pechuga', name:'Pechuga de pollo', unit:'g', kcal:165, prot:31},
+  {id:'pollo_muslo', name:'Muslo de pollo (sin piel)', unit:'g', kcal:177, prot:24},
+  {id:'pollo_contramuslo', name:'Contramuslo de pollo', unit:'g', kcal:185, prot:24},
+  {id:'pollo_alitas', name:'Alitas de pollo', unit:'g', kcal:203, prot:30},
+  {id:'pollo_entero_asado', name:'Pollo asado (con piel)', unit:'g', kcal:220, prot:27},
+  {id:'pavo_pechuga', name:'Pechuga de pavo', unit:'g', kcal:135, prot:29},
+  {id:'pavo_fiambre', name:'Fiambre de pavo', unit:'g', kcal:110, prot:18},
+  {id:'codorniz', name:'Codorniz', unit:'g', kcal:192, prot:22},
+  {id:'pato', name:'Pato (sin piel)', unit:'g', kcal:201, prot:24},
+  // ---- TERNERA / VACUNO ----
+  {id:'filete_ternera', name:'Filete de ternera', unit:'g', kcal:158, prot:27},
+  {id:'ternera_picada', name:'Carne picada de ternera', unit:'g', kcal:215, prot:26},
+  {id:'solomillo_ternera', name:'Solomillo de ternera', unit:'g', kcal:158, prot:28},
+  {id:'entrecot', name:'Entrecot de vacuno', unit:'g', kcal:255, prot:25},
+  {id:'chuleton', name:'Chuletón de vacuno', unit:'g', kcal:280, prot:24},
+  {id:'redondo_ternera', name:'Redondo de ternera', unit:'g', kcal:140, prot:29},
+  {id:'buey', name:'Carne de buey', unit:'g', kcal:170, prot:26},
+  {id:'rabo_toro', name:'Rabo de toro (guisado)', unit:'g', kcal:250, prot:28},
+  // ---- CERDO ----
+  {id:'lomo_cerdo', name:'Lomo de cerdo', unit:'g', kcal:165, prot:27},
+  {id:'solomillo_cerdo', name:'Solomillo de cerdo', unit:'g', kcal:143, prot:26},
+  {id:'cerdo_picada', name:'Carne picada de cerdo', unit:'g', kcal:245, prot:23},
+  {id:'costilla_cerdo', name:'Costilla de cerdo', unit:'g', kcal:290, prot:22},
+  {id:'panceta', name:'Panceta / bacon', unit:'g', kcal:400, prot:13},
+  {id:'secreto_iberico', name:'Secreto ibérico', unit:'g', kcal:290, prot:20},
+  {id:'jamon_serrano', name:'Jamón serrano', unit:'g', kcal:240, prot:31},
+  {id:'jamon_cocido', name:'Jamón cocido / york', unit:'g', kcal:110, prot:18},
+  {id:'chorizo', name:'Chorizo', unit:'g', kcal:455, prot:24},
+  {id:'salchichon', name:'Salchichón', unit:'g', kcal:420, prot:22},
+  {id:'salchicha', name:'Salchicha fresca', unit:'g', kcal:295, prot:13},
+  // ---- CORDERO / OTROS ----
+  {id:'cordero_chuleta', name:'Chuletas de cordero', unit:'g', kcal:290, prot:25},
+  {id:'cordero_pierna', name:'Pierna de cordero asada', unit:'g', kcal:235, prot:26},
+  {id:'conejo', name:'Conejo', unit:'g', kcal:173, prot:33},
+  {id:'higado', name:'Hígado de ternera', unit:'g', kcal:135, prot:20},
+  // ---- PESCADO / MARISCO ----
   {id:'merluza', name:'Merluza', unit:'g', kcal:90, prot:18},
   {id:'salmon', name:'Salmón', unit:'g', kcal:208, prot:20},
+  {id:'atun_fresco', name:'Atún fresco', unit:'g', kcal:144, prot:23},
   {id:'atun_lata', name:'Atún en lata (escurrido)', unit:'g', kcal:115, prot:26},
+  {id:'bacalao', name:'Bacalao', unit:'g', kcal:82, prot:18},
+  {id:'dorada', name:'Dorada', unit:'g', kcal:115, prot:20},
+  {id:'lubina', name:'Lubina', unit:'g', kcal:97, prot:18},
+  {id:'sardina', name:'Sardinas', unit:'g', kcal:208, prot:25},
+  {id:'gamba', name:'Gambas / langostinos', unit:'g', kcal:99, prot:24},
   {id:'calamar_plancha', name:'Calamar a la plancha', unit:'g', kcal:92, prot:16},
-  {id:'huevo', name:'Huevo (mediano)', unit:'ud', kcal:70, prot:6},
+  {id:'mejillon', name:'Mejillones', unit:'g', kcal:86, prot:12},
+  // ---- HUEVOS ----
+  {id:'huevo', name:'Huevo entero (mediano)', unit:'ud', kcal:70, prot:6},
   {id:'clara', name:'Clara de huevo', unit:'ud', kcal:17, prot:3.6},
-  {id:'arroz_cocido', name:'Arroz cocido', unit:'g', kcal:130, prot:2.7},
+  {id:'tortilla_francesa', name:'Tortilla francesa (2 huevos)', unit:'ud', kcal:200, prot:13},
+  {id:'tortilla_patata', name:'Tortilla de patata (porción)', unit:'ud', kcal:270, prot:9},
+  {id:'huevo_frito', name:'Huevo frito', unit:'ud', kcal:95, prot:6},
+  // ---- HIDRATOS ----
+  {id:'arroz_cocido', name:'Arroz blanco cocido', unit:'g', kcal:130, prot:2.7},
+  {id:'arroz_integral', name:'Arroz integral cocido', unit:'g', kcal:112, prot:2.6},
   {id:'pasta_cocida', name:'Pasta cocida', unit:'g', kcal:155, prot:5.5},
   {id:'patata_cocida', name:'Patata cocida', unit:'g', kcal:87, prot:2},
+  {id:'patata_asada', name:'Patata asada', unit:'g', kcal:93, prot:2.5},
   {id:'patata_peq', name:'Patata pequeña cocida (ud)', unit:'ud', kcal:50, prot:1.2},
-  {id:'pan', name:'Pan (rebanada/trozo)', unit:'g', kcal:265, prot:9},
+  {id:'patata_frita', name:'Patatas fritas', unit:'g', kcal:312, prot:3.4},
+  {id:'boniato_asado', name:'Boniato asado', unit:'g', kcal:90, prot:2},
+  {id:'boniato_cocido', name:'Boniato cocido', unit:'g', kcal:76, prot:1.4},
+  {id:'pan', name:'Pan (trozo)', unit:'g', kcal:265, prot:9},
+  {id:'pan_integral', name:'Pan integral', unit:'g', kcal:247, prot:10},
   {id:'avena', name:'Avena (en seco)', unit:'g', kcal:380, prot:13},
-  {id:'yogur_griego', name:'Yogur griego natural', unit:'g', kcal:97, prot:9},
-  {id:'leche', name:'Leche semidesnatada', unit:'g', kcal:46, prot:3.3},
-  {id:'queso_fresco', name:'Queso fresco batido', unit:'g', kcal:60, prot:8},
+  {id:'cuscus', name:'Cuscús cocido', unit:'g', kcal:112, prot:3.8},
+  {id:'quinoa', name:'Quinoa cocida', unit:'g', kcal:120, prot:4.4},
+  // ---- LEGUMBRES ----
   {id:'lentejas', name:'Lentejas cocidas', unit:'g', kcal:115, prot:9},
   {id:'garbanzos', name:'Garbanzos cocidos', unit:'g', kcal:165, prot:9},
-  {id:'aceite', name:'Aceite de oliva', unit:'g', kcal:884, prot:0},
+  {id:'alubias', name:'Alubias cocidas', unit:'g', kcal:130, prot:9},
+  // ---- VERDURAS / HORTALIZAS ----
+  {id:'judias_verdes', name:'Judías verdes', unit:'g', kcal:31, prot:1.8},
+  {id:'tomate', name:'Tomate', unit:'g', kcal:18, prot:0.9},
+  {id:'tomate_cherry', name:'Tomates cherry', unit:'g', kcal:18, prot:0.9},
+  {id:'lechuga', name:'Lechuga', unit:'g', kcal:15, prot:1.4},
+  {id:'brocoli', name:'Brócoli', unit:'g', kcal:34, prot:2.8},
+  {id:'espinaca', name:'Espinacas', unit:'g', kcal:23, prot:2.9},
+  {id:'pimiento', name:'Pimiento', unit:'g', kcal:31, prot:1},
+  {id:'calabacin', name:'Calabacín', unit:'g', kcal:17, prot:1.2},
+  {id:'berenjena', name:'Berenjena', unit:'g', kcal:25, prot:1},
+  {id:'zanahoria', name:'Zanahoria', unit:'g', kcal:41, prot:0.9},
+  {id:'cebolla', name:'Cebolla', unit:'g', kcal:40, prot:1.1},
+  {id:'champinon', name:'Champiñones / setas', unit:'g', kcal:22, prot:3.1},
+  {id:'esparrago', name:'Espárragos', unit:'g', kcal:20, prot:2.2},
+  {id:'guisantes', name:'Guisantes', unit:'g', kcal:81, prot:5.4},
+  {id:'pepino', name:'Pepino', unit:'g', kcal:15, prot:0.7},
+  {id:'aguacate', name:'Aguacate', unit:'g', kcal:160, prot:2},
+  // ---- LÁCTEOS ----
+  {id:'leche_entera', name:'Leche entera', unit:'g', kcal:63, prot:3.2},
+  {id:'leche_semi', name:'Leche semidesnatada', unit:'g', kcal:46, prot:3.3},
+  {id:'leche_desnatada', name:'Leche desnatada', unit:'g', kcal:35, prot:3.4},
+  {id:'yogur_griego', name:'Yogur griego natural', unit:'g', kcal:97, prot:9},
+  {id:'yogur_natural', name:'Yogur natural', unit:'ud', kcal:60, prot:4},
+  {id:'queso_fresco', name:'Queso fresco batido', unit:'g', kcal:60, prot:8},
+  {id:'queso_curado', name:'Queso curado', unit:'g', kcal:390, prot:25},
+  {id:'mozzarella', name:'Mozzarella', unit:'g', kcal:280, prot:22},
+  // ---- FRUTA ----
   {id:'platano', name:'Plátano (ud)', unit:'ud', kcal:105, prot:1.3},
   {id:'manzana', name:'Manzana (ud)', unit:'ud', kcal:80, prot:0.4},
+  {id:'naranja', name:'Naranja (ud)', unit:'ud', kcal:62, prot:1.2},
+  {id:'fresa', name:'Fresas', unit:'g', kcal:33, prot:0.7},
+  {id:'arandanos', name:'Arándanos', unit:'g', kcal:57, prot:0.7},
+  // ---- GRASAS / FRUTOS SECOS ----
+  {id:'aceite', name:'Aceite de oliva', unit:'g', kcal:884, prot:0},
   {id:'almendras', name:'Almendras', unit:'g', kcal:580, prot:21},
+  {id:'nueces', name:'Nueces', unit:'g', kcal:654, prot:15},
+  {id:'cacahuete', name:'Cacahuetes', unit:'g', kcal:567, prot:26},
+  {id:'crema_cacahuete', name:'Crema de cacahuete', unit:'g', kcal:588, prot:25},
+  // ---- PLATOS / VARIOS ----
+  {id:'pizza_casera', name:'Pizza casera tomate, queso y pollo (porción)', unit:'ud', kcal:285, prot:18},
   {id:'whey', name:'Proteína whey (cazo ~30g)', unit:'ud', kcal:120, prot:24},
   {id:'tarta_prot', name:'Tarta de proteína (porción)', unit:'ud', kcal:250, prot:20},
+  {id:'bocata_calamares', name:'Bocata de calamares', unit:'ud', kcal:600, prot:22},
   {id:'cafe_solo', name:'Café solo', unit:'ud', kcal:5, prot:0},
   {id:'cafe_leche', name:'Café con leche', unit:'ud', kcal:60, prot:3},
-  {id:'bocata_calamares', name:'Bocata de calamares', unit:'ud', kcal:600, prot:22},
   {id:'cerveza', name:'Cerveza (caña/tercio)', unit:'ud', kcal:130, prot:1}
 ];
+
+var chosenFood = null;
 
 function getFood(id) {
   for (var i=0; i<FOODS.length; i++) if (FOODS[i].id === id) return FOODS[i];
   return null;
 }
 
-function populateFoodSelect() {
-  var sel = $('foodSelect'); if (!sel) return;
-  var html = '<option value="">Selecciona...</option>';
-  FOODS.forEach(function(f){
+// Quita acentos para que la búsqueda sea tolerante
+function normalize(s) {
+  return s.toLowerCase()
+    .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+    .replace(/ó/g,'o').replace(/ú/g,'u').replace(/ñ/g,'n');
+}
+
+function renderFoodResults(query) {
+  var box = $('foodResults'); if (!box) return;
+  var q = normalize(query.trim());
+  if (!q) { box.innerHTML = ''; return; }
+  var matches = FOODS.filter(function(f){ return normalize(f.name).indexOf(q) >= 0; });
+  if (!matches.length) {
+    box.innerHTML = '<div style="padding:8px;color:var(--muted);font-size:12px">Sin resultados. Dime qué alimento falta y lo añado.</div>';
+    return;
+  }
+  box.innerHTML = matches.slice(0,12).map(function(f){
     var per = f.unit === 'g' ? '/100g' : '/ud';
-    html += '<option value="'+f.id+'">'+f.name+' ('+f.kcal+' kcal'+per+')</option>';
+    return '<div class="food-result" data-id="'+f.id+'" style="padding:9px 10px;border-bottom:1px solid #1a1a1a;cursor:pointer;font-size:13px">'+
+      '<span style="color:var(--text)">'+f.name+'</span>'+
+      '<span style="color:var(--muted);font-size:11px;font-family:monospace;float:right">'+f.kcal+' kcal'+per+'</span></div>';
+  }).join('');
+  box.querySelectorAll('.food-result').forEach(function(row){
+    row.addEventListener('click', function(){ pickFood(row.getAttribute('data-id')); });
   });
-  sel.innerHTML = html;
+}
+
+function pickFood(id) {
+  var f = getFood(id);
+  if (!f) return;
+  chosenFood = f;
+  $('foodSearch').value = '';
+  $('foodResults').innerHTML = '';
+  $('foodChosen').style.display = 'block';
+  $('foodChosenName').textContent = f.name;
+  var per = f.unit === 'g' ? 'por 100g' : 'por unidad';
+  $('foodChosenInfo').textContent = f.kcal+' kcal · '+f.prot+'g proteína ('+per+')';
+  $('foodUnit').textContent = f.unit === 'g' ? 'g' : 'unidades';
+  $('foodQty').value = '';
+  $('foodPreview').style.display = 'none';
+  $('foodQty').focus();
 }
 
 function updateFoodPreview() {
-  var f = getFood($('foodSelect').value);
-  var unitEl = $('foodUnit');
+  if (!chosenFood) return;
   var prev = $('foodPreview');
-  if (!f) { if(prev) prev.style.display='none'; return; }
-  if (unitEl) unitEl.textContent = f.unit === 'g' ? 'g' : 'unidades';
   var qty = parseFloat($('foodQty').value);
   if (!qty || qty <= 0) { prev.style.display='none'; return; }
-  var factor = f.unit === 'g' ? qty/100 : qty;
-  var kcal = Math.round(f.kcal * factor);
-  var prot = Math.round(f.prot * factor * 10) / 10;
+  var factor = chosenFood.unit === 'g' ? qty/100 : qty;
+  var kcal = Math.round(chosenFood.kcal * factor);
+  var prot = Math.round(chosenFood.prot * factor * 10) / 10;
   prev.style.display = 'block';
   prev.textContent = '≈ ' + kcal + ' kcal · ' + prot + 'g proteína';
 }
 
 function addFood() {
-  var f = getFood($('foodSelect').value);
-  if (!f) { showToast('⚠️ Elige un alimento', '#f4a261'); return; }
+  if (!chosenFood) { showToast('⚠️ Busca y elige un alimento', '#f4a261'); return; }
   var qty = parseFloat($('foodQty').value);
   if (!qty || qty <= 0) { showToast('⚠️ Pon la cantidad', '#f4a261'); return; }
-  var factor = f.unit === 'g' ? qty/100 : qty;
-  var kcal = Math.round(f.kcal * factor);
-  var prot = Math.round(f.prot * factor * 10) / 10;
-  var desc = f.name + ' — ' + qty + (f.unit === 'g' ? 'g' : ' ud');
+  var factor = chosenFood.unit === 'g' ? qty/100 : qty;
+  var kcal = Math.round(chosenFood.kcal * factor);
+  var prot = Math.round(chosenFood.prot * factor * 10) / 10;
+  var desc = chosenFood.name + ' — ' + qty + (chosenFood.unit === 'g' ? 'g' : ' ud');
   var d = loadNutri();
   var t = todayStr();
   if (!d[t]) d[t] = [];
   d[t].push({ desc: desc, kcal: kcal, prot: prot });
   saveNutri(d);
-  $('foodSelect').value = '';
+  var name = chosenFood.name;
+  chosenFood = null;
+  $('foodChosen').style.display = 'none';
   $('foodQty').value = '';
   $('foodPreview').style.display = 'none';
   renderNutrition();
-  showToast('✅ ' + f.name + ' añadido');
+  showToast('✅ ' + name + ' añadido');
 }
 
 // ==================== INIT ====================
@@ -988,8 +1116,7 @@ function init() {
   $('importBtn').addEventListener('click', importFromText);
   $('clearBtn').addEventListener('click', clearAllData);
   // Nutrición
-  populateFoodSelect();
-  var fs = $('foodSelect'); if (fs) fs.addEventListener('change', updateFoodPreview);
+  var fsi = $('foodSearch'); if (fsi) fsi.addEventListener('input', function(){ renderFoodResults(fsi.value); });
   var fq = $('foodQty'); if (fq) fq.addEventListener('input', updateFoodPreview);
   var afb = $('addFoodBtn'); if (afb) afb.addEventListener('click', addFood);
   var swb = $('saveWeightBtn'); if (swb) swb.addEventListener('click', saveWeight);
