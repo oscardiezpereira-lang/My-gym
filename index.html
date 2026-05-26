@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -126,6 +125,7 @@
   <div class="tab" data-section="progress">📈 Progreso</div>
   <div class="tab" data-section="history">🗂️ Historial</div>
   <div class="tab" data-section="coach">🎯 Coach</div>
+  <div class="tab" data-section="nutri">🍗 Nutrición</div>
   <div class="tab" data-section="backup">💾 Datos</div>
 </div>
 <main>
@@ -202,6 +202,34 @@
 <div id="section-coach" class="section">
   <div class="section-header"><div class="section-title">🎯 COACH</div></div>
   <div id="coachContent"></div>
+</div>
+<div id="section-nutri" class="section">
+  <div class="section-header"><div class="section-title">🍗 NUTRICIÓN</div></div>
+  <div id="nutriGoalCard" class="card">
+    <div class="card-title">🎯 OBJETIVO DIARIO</div>
+    <div id="nutriGoalBody" style="font-size:13px;color:var(--muted)">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">➕ AÑADIR COMIDA</div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>¿Qué has comido?</label>
+      <textarea id="mealInput" placeholder="Ej: pechuga de pollo a la plancha 200g, 5 patatas pequeñas cocidas, 2 huevos" style="min-height:64px"></textarea>
+    </div>
+    <button type="button" class="btn" id="estimateMealBtn">🤖 CALCULAR Y AÑADIR</button>
+    <div id="mealEstimateBox" style="display:none;margin-top:12px;background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:14px"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 HOY (<span id="nutriTodayDate">—</span>)</div>
+    <div id="nutriTodayBody"><div class="empty-state" style="padding:20px">Sin comidas registradas hoy.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚖️ REGISTRAR PESO</div>
+    <div class="form-row">
+      <div class="form-group"><label>Peso (kg)</label><input type="number" id="weightInput" step="0.1" min="0" placeholder="90.7"></div>
+      <div class="form-group"><label>&nbsp;</label><button type="button" class="btn" id="saveWeightBtn" style="font-size:14px">GUARDAR PESO</button></div>
+    </div>
+    <div id="weightHistory" style="margin-top:12px;font-size:12px;color:var(--muted)"></div>
+  </div>
 </div>
 <div id="section-backup" class="section">
   <div class="section-header"><div class="section-title">💾 DATOS</div></div>
@@ -343,6 +371,7 @@ function showTab(name, tabEl) {
   else if (name === 'progress') renderProgress();
   else if (name === 'history') renderHistory();
   else if (name === 'coach') renderCoach();
+  else if (name === 'nutri') renderNutrition();
   else if (name === 'backup') renderStorageStatus();
 }
 
@@ -730,6 +759,172 @@ function renderStorageStatus() {
   el.innerHTML = '<div style="display:flex;justify-content:space-between"><span>💾 Local</span><span style="color:var(--text)">'+st+'</span></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span>🏋️ En memoria</span><span style="color:var(--text)">'+sessions.length+' sesiones</span></div>';
 }
 
+// ==================== NUTRICIÓN ====================
+var NUTRI_KEY = 'oscar_nutrition';   // { 'YYYY-MM-DD': [ {desc, kcal, prot} ] }
+var WEIGHT_KEY = 'oscar_weights';    // [ {date, kg} ]
+// Objetivo: hombre 1.80m, ~91kg, activo + pádel, déficit moderado para recomp
+var NUTRI_GOAL = { kcal: 2100, prot: 170 };
+
+function todayStr() {
+  var d = new Date();
+  var m = ('0'+(d.getMonth()+1)).slice(-2);
+  var day = ('0'+d.getDate()).slice(-2);
+  return d.getFullYear()+'-'+m+'-'+day;
+}
+
+function loadNutri() {
+  try { var r = localStorage.getItem(NUTRI_KEY); return r ? JSON.parse(r) : {}; }
+  catch(e) { return {}; }
+}
+function saveNutri(obj) {
+  try { localStorage.setItem(NUTRI_KEY, JSON.stringify(obj)); return true; }
+  catch(e) { showToast('❌ No se pudo guardar', '#e63946'); return false; }
+}
+function loadWeights() {
+  try { var r = localStorage.getItem(WEIGHT_KEY); return r ? JSON.parse(r) : []; }
+  catch(e) { return []; }
+}
+function saveWeights(arr) {
+  try { localStorage.setItem(WEIGHT_KEY, JSON.stringify(arr)); return true; }
+  catch(e) { return false; }
+}
+
+function renderNutrition() {
+  // Objetivo
+  var gb = $('nutriGoalBody');
+  if (gb) {
+    gb.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Calorías objetivo</span><span style="color:var(--gold);font-family:monospace;font-weight:600">'+NUTRI_GOAL.kcal+' kcal</span></div>'+
+      '<div style="display:flex;justify-content:space-between"><span>Proteína objetivo</span><span style="color:var(--green);font-family:monospace;font-weight:600">'+NUTRI_GOAL.prot+' g</span></div>'+
+      '<div style="margin-top:8px;font-size:11px;font-style:italic">Déficit moderado para recomposición. La proteína alta es lo que protege tu músculo.</div>';
+  }
+  // Hoy
+  var t = $('nutriTodayDate'); if (t) t.textContent = formatDate(todayStr());
+  var data = loadNutri();
+  var meals = data[todayStr()] || [];
+  var body = $('nutriTodayBody');
+  if (body) {
+    if (!meals.length) {
+      body.innerHTML = '<div class="empty-state" style="padding:20px">Sin comidas registradas hoy.</div>';
+    } else {
+      var totalK = 0, totalP = 0;
+      var rows = meals.map(function(m, i){
+        totalK += m.kcal || 0;
+        totalP += m.prot || 0;
+        return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid #1a1a1a;gap:10px">'+
+          '<div style="flex:1"><div style="font-size:13px;color:var(--text)">'+m.desc+'</div>'+
+          '<div style="font-size:11px;color:var(--muted);font-family:monospace;margin-top:2px">'+(m.kcal||0)+' kcal · '+(m.prot||0)+'g prot</div></div>'+
+          '<button type="button" class="del-meal" data-idx="'+i+'" style="background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:0 4px">×</button></div>';
+      }).join('');
+      var kPct = Math.min(100, Math.round(totalK/NUTRI_GOAL.kcal*100));
+      var pPct = Math.min(100, Math.round(totalP/NUTRI_GOAL.prot*100));
+      var kColor = totalK > NUTRI_GOAL.kcal ? 'var(--red)' : 'var(--gold)';
+      var summary = '<div style="margin-bottom:14px">'+
+        '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Calorías</span><span style="font-family:monospace;color:'+kColor+'">'+totalK+' / '+NUTRI_GOAL.kcal+'</span></div>'+
+        '<div style="background:var(--dark);border-radius:6px;height:8px;overflow:hidden"><div style="height:100%;width:'+kPct+'%;background:'+kColor+'"></div></div>'+
+        '<div style="display:flex;justify-content:space-between;font-size:12px;margin:8px 0 4px"><span>Proteína</span><span style="font-family:monospace;color:var(--green)">'+totalP+' / '+NUTRI_GOAL.prot+'g</span></div>'+
+        '<div style="background:var(--dark);border-radius:6px;height:8px;overflow:hidden"><div style="height:100%;width:'+pPct+'%;background:var(--green)"></div></div>'+
+        (totalP < NUTRI_GOAL.prot ? '<div style="font-size:11px;color:var(--gold);margin-top:6px">⚠️ Te faltan '+(NUTRI_GOAL.prot-totalP)+'g de proteína.</div>' : '<div style="font-size:11px;color:var(--green);margin-top:6px">✅ Proteína cubierta.</div>')+
+        '</div>';
+      body.innerHTML = summary + rows;
+      // Botones borrar
+      body.querySelectorAll('.del-meal').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var idx = parseInt(btn.getAttribute('data-idx'));
+          var d = loadNutri();
+          if (d[todayStr()]) { d[todayStr()].splice(idx,1); saveNutri(d); renderNutrition(); }
+        });
+      });
+    }
+  }
+  // Peso
+  renderWeightHistory();
+}
+
+function renderWeightHistory() {
+  var el = $('weightHistory'); if (!el) return;
+  var w = loadWeights();
+  if (!w.length) { el.innerHTML = 'Sin registros de peso aún.'; return; }
+  w.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  var last = w[0];
+  var trend = '';
+  if (w.length >= 2) {
+    var diff = (last.kg - w[w.length-1].kg);
+    var sign = diff < 0 ? '▼' : (diff > 0 ? '▲' : '—');
+    var col = diff < 0 ? 'var(--green)' : (diff > 0 ? 'var(--red)' : 'var(--muted)');
+    trend = '<span style="color:'+col+'"> '+sign+' '+Math.abs(diff).toFixed(1)+' kg desde el inicio</span>';
+  }
+  var rows = w.slice(0,8).map(function(x){
+    return '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>'+formatDate(x.date)+'</span><span style="font-family:monospace;color:var(--text)">'+x.kg+' kg</span></div>';
+  }).join('');
+  el.innerHTML = '<div style="font-size:13px;color:var(--text);margin-bottom:8px">Último: <strong>'+last.kg+' kg</strong>'+trend+'</div>'+rows;
+}
+
+function saveWeight() {
+  var v = parseFloat($('weightInput').value);
+  if (!v || v <= 0) { showToast('⚠️ Pon un peso válido', '#e63946'); return; }
+  var w = loadWeights();
+  // Si ya hay registro de hoy, lo reemplaza
+  var t = todayStr();
+  w = w.filter(function(x){ return x.date !== t; });
+  w.push({ date: t, kg: v });
+  saveWeights(w);
+  $('weightInput').value = '';
+  renderWeightHistory();
+  showToast('✅ Peso guardado');
+}
+
+function estimateMeal() {
+  var desc = $('mealInput').value.trim();
+  if (!desc) { showToast('⚠️ Escribe qué has comido', '#f4a261'); return; }
+  var box = $('mealEstimateBox');
+  box.style.display = 'block';
+  box.innerHTML = '<div style="color:var(--muted);font-size:13px">🤖 Calculando...</div>';
+
+  var prompt = 'Eres un nutricionista. Estima las calorías totales y los gramos de proteína totales de esta comida. Responde SOLO con un objeto JSON, sin texto adicional, sin markdown, con este formato exacto: {"kcal": numero, "prot": numero, "nota": "texto breve opcional"}. Comida: '+desc;
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var text = '';
+    if (data.content) {
+      for (var i=0; i<data.content.length; i++) {
+        if (data.content[i].type === 'text') text += data.content[i].text;
+      }
+    }
+    var clean = text.replace(/```json/g,'').replace(/```/g,'').trim();
+    var est = JSON.parse(clean);
+    var kcal = Math.round(est.kcal || 0);
+    var prot = Math.round(est.prot || 0);
+    box.innerHTML = '<div style="font-size:14px;margin-bottom:8px">📊 Estimación:</div>'+
+      '<div style="display:flex;gap:16px;margin-bottom:8px"><span style="font-family:monospace;color:var(--gold)">'+kcal+' kcal</span><span style="font-family:monospace;color:var(--green)">'+prot+'g proteína</span></div>'+
+      (est.nota ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:10px">'+est.nota+'</div>' : '')+
+      '<button type="button" id="confirmMealBtn" class="btn" style="font-size:14px;background:var(--green)">✅ AÑADIR AL DÍA</button>';
+    $('confirmMealBtn').addEventListener('click', function(){
+      var d = loadNutri();
+      var t = todayStr();
+      if (!d[t]) d[t] = [];
+      d[t].push({ desc: desc, kcal: kcal, prot: prot });
+      saveNutri(d);
+      $('mealInput').value = '';
+      box.style.display = 'none';
+      box.innerHTML = '';
+      renderNutrition();
+      showToast('✅ Comida añadida');
+    });
+  })
+  .catch(function(e){
+    box.innerHTML = '<div style="color:var(--red);font-size:13px">❌ No se pudo calcular. ¿Tienes internet?<br><span style="color:var(--muted);font-size:11px">'+e.message+'</span></div>';
+  });
+}
+
 // ==================== INIT ====================
 function init() {
   // Botones de pestañas
@@ -754,6 +949,9 @@ function init() {
   $('copyExportBtn').addEventListener('click', copyExportText);
   $('importBtn').addEventListener('click', importFromText);
   $('clearBtn').addEventListener('click', clearAllData);
+  // Nutrición
+  var emb = $('estimateMealBtn'); if (emb) emb.addEventListener('click', estimateMeal);
+  var swb = $('saveWeightBtn'); if (swb) swb.addEventListener('click', saveWeight);
   // Fecha por defecto
   try { $('logDate').valueAsDate = new Date(); } catch(e){}
   // Cargar
@@ -768,6 +966,5 @@ if (document.readyState === 'loading') {
   init();
 }
 </script>
-
 </body>
 </html>
