@@ -125,6 +125,7 @@
   <div class="tab" data-section="progress">📈 Progreso</div>
   <div class="tab" data-section="history">🗂️ Historial</div>
   <div class="tab" data-section="coach">🎯 Coach</div>
+  <div class="tab" data-section="plan">🗓️ Plan</div>
   <div class="tab" data-section="nutri">🍗 Nutrición</div>
   <div class="tab" data-section="backup">💾 Datos</div>
 </div>
@@ -202,6 +203,17 @@
 <div id="section-coach" class="section">
   <div class="section-header"><div class="section-title">🎯 COACH</div></div>
   <div id="coachContent"></div>
+</div>
+<div id="section-plan" class="section">
+  <div class="section-header"><div class="section-title">🗓️ PLAN 8 SEMANAS</div></div>
+  <div id="planStartCard" class="card">
+    <div class="card-title">🚀 INICIO DEL BLOQUE</div>
+    <div class="form-row">
+      <div class="form-group"><label>Fecha de inicio</label><input type="date" id="planStartDate"></div>
+      <div class="form-group"><label>&nbsp;</label><button type="button" class="btn" id="planStartBtn" style="font-size:14px">EMPEZAR PLAN</button></div>
+    </div>
+  </div>
+  <div id="planContent"></div>
 </div>
 <div id="section-nutri" class="section">
   <div class="section-header"><div class="section-title">🍗 NUTRICIÓN</div></div>
@@ -294,9 +306,9 @@ var DAYS = {
   ]},
   '2': {name:'Pierna A', exercises:[
     {id:'activacion_cuad', name:'Activación: ext cuádriceps ligero', baseline:null, series:2, repsMin:15, repsMax:15, rest:'60 s', isActivation:true},
-    {id:'incline_squat', name:'Incline Squat (máquina)', baseline:80, series:4, repsMin:5, repsMax:6, rest:'3-4 min'},
+    {id:'incline_squat', name:'Incline Squat (máquina)', baseline:80, series:4, repsMin:5, repsMax:6, rest:'3-4 min', alt:'Goblet squat pesada'},
     {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5, rest:'3-4 min'},
-    {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Zancadas'},
     {id:'aductor', name:'Aductor máquina', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
     {id:'abduccion', name:'Abducción cadera', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
     {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10, rest:'45 s'}
@@ -311,9 +323,9 @@ var DAYS = {
   ]},
   '4': {name:'Pierna B', exercises:[
     {id:'activacion_fem', name:'Activación: curl femoral ligero', baseline:null, series:2, repsMin:12, repsMax:12, rest:'60 s', isActivation:true},
-    {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8, rest:'3-4 min'},
+    {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8, rest:'3-4 min', alt:'Hack squat / Goblet'},
     {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8, rest:'2-3 min'},
-    {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
+    {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Step-ups'},
     {id:'curl_femoral', name:'Curl femoral tumbado', baseline:42.5, series:3, repsMin:8, repsMax:10, rest:'90 s'},
     {id:'ext_cuadriceps', name:'Extensión cuádriceps', baseline:70, series:3, repsMin:10, repsMax:12, rest:'90 s'}
   ]}
@@ -382,6 +394,7 @@ function showTab(name, tabEl) {
   else if (name === 'progress') renderProgress();
   else if (name === 'history') renderHistory();
   else if (name === 'coach') renderCoach();
+  else if (name === 'plan') renderPlan();
   else if (name === 'nutri') renderNutrition();
   else if (name === 'backup') renderStorageStatus();
 }
@@ -548,6 +561,7 @@ function renderRoutine() {
       var nameCell = ex.isActivation
         ? '<span style="font-weight:500;color:#aaa;font-style:italic">'+ex.name+'</span>'
         : '<span style="font-weight:500">'+ex.name+'</span>';
+      if (ex.alt) nameCell += '<div style="font-size:10px;color:var(--blue);margin-top:2px">🔄 Alt: '+ex.alt+'</div>';
       rowsHtml += '<tr><td>'+nameCell+'</td>'+
                   '<td style="text-align:center">'+ex.series+'</td>'+
                   '<td style="text-align:center">'+range+'</td>'+
@@ -712,9 +726,16 @@ function renderCoach() {
 function exportData() {
   var box = $('exportBox');
   var ta = $('exportText');
-  ta.value = JSON.stringify(sessions, null, 2);
+  var bundle = {
+    version: 2,
+    sessions: sessions,
+    nutrition: loadNutri(),
+    weights: loadWeights(),
+    plan: loadPlan()
+  };
+  ta.value = JSON.stringify(bundle, null, 2);
   box.style.display = 'block';
-  showToast('✅ Datos listos');
+  showToast('✅ Backup completo listo (entrenos + nutrición + pesos + plan)');
 }
 
 function copyExportText() {
@@ -733,16 +754,27 @@ function importFromText() {
   if (!raw) { showToast('⚠️ Pega el JSON primero', '#f4a261'); return; }
   try {
     var p = JSON.parse(raw);
-    var imp = Array.isArray(p) ? p : (p && Array.isArray(p.sessions) ? p.sessions : null);
-    if (!imp) throw new Error('Formato inválido');
-    sessions = imp;
+    var msg = [];
+    if (Array.isArray(p)) {
+      // Formato antiguo: solo sesiones
+      sessions = p;
+    } else if (p && typeof p === 'object') {
+      if (Array.isArray(p.sessions)) { sessions = p.sessions; }
+      if (p.nutrition && typeof p.nutrition === 'object') { saveNutri(p.nutrition); msg.push('nutrición'); }
+      if (Array.isArray(p.weights)) { saveWeights(p.weights); msg.push('pesos'); }
+      if (p.plan && p.plan.startDate) { savePlan(p.plan); msg.push('plan'); }
+      if (!Array.isArray(p.sessions) && !msg.length) throw new Error('Formato inválido');
+    } else {
+      throw new Error('Formato inválido');
+    }
     sessions.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
     if (saveToStorage()) {
       $('importText').value = '';
       updateHeader();
       renderRoutine();
       renderStorageStatus();
-      showToast('✅ '+sessions.length+' sesiones importadas');
+      var extra = msg.length ? ' (+ '+msg.join(', ')+')' : '';
+      showToast('✅ '+sessions.length+' sesiones importadas'+extra);
     }
   } catch(e) {
     showToast('❌ Error: '+e.message, '#e63946');
@@ -804,9 +836,24 @@ function renderNutrition() {
   // Objetivo
   var gb = $('nutriGoalBody');
   if (gb) {
+    var wk = getWeeklyNutriStats();
+    var wkHtml = '';
+    if (wk) {
+      var kDiff = wk.avgK - NUTRI_GOAL.kcal;
+      var kMsg = kDiff > 100 ? '<span style="color:var(--red)">+'+kDiff+' sobre objetivo — aquí está el freno</span>'
+               : kDiff < -300 ? '<span style="color:var(--gold)">'+kDiff+' — déficit muy agresivo, ojo con perder músculo</span>'
+               : '<span style="color:var(--green)">en zona de déficit correcto</span>';
+      wkHtml = '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">'+
+        '<div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">📊 Media últimos 7 días ('+wk.days+' días registrados)</div>'+
+        '<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Calorías/día</span><span style="font-family:monospace;color:var(--text)">'+wk.avgK+' kcal</span></div>'+
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Proteína/día</span><span style="font-family:monospace;color:'+(wk.avgP>=NUTRI_GOAL.prot?'var(--green)':'var(--gold)')+'">'+wk.avgP+' g</span></div>'+
+        '<div style="font-size:11px">'+kMsg+'</div>'+
+        (wk.days < 5 ? '<div style="font-size:11px;color:var(--muted);margin-top:4px;font-style:italic">Registra más días para que la media sea fiable.</div>' : '')+
+        '</div>';
+    }
     gb.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Calorías objetivo</span><span style="color:var(--gold);font-family:monospace;font-weight:600">'+NUTRI_GOAL.kcal+' kcal</span></div>'+
       '<div style="display:flex;justify-content:space-between"><span>Proteína objetivo</span><span style="color:var(--green);font-family:monospace;font-weight:600">'+NUTRI_GOAL.prot+' g</span></div>'+
-      '<div style="margin-top:8px;font-size:11px;font-style:italic">Déficit moderado para recomposición. La proteína alta es lo que protege tu músculo.</div>';
+      '<div style="margin-top:8px;font-size:11px;font-style:italic">Déficit moderado para recomposición. La proteína alta es lo que protege tu músculo.</div>'+wkHtml;
   }
   // Hoy
   var t = $('nutriTodayDate'); if (t) t.textContent = formatDate(todayStr());
@@ -1091,7 +1138,99 @@ function addFood() {
   showToast('✅ ' + name + ' añadido');
 }
 
-// ==================== INIT ====================
+// ==================== PLAN 8 SEMANAS ====================
+var PLAN_KEY = 'oscar_plan';
+var PLAN_WEEKS = [
+  {w:1, fase:'REENTRADA', color:'var(--blue)', desc:'Mismos pesos de antes del parón. 2-3 reps MENOS por serie (lejos del fallo). Una serie menos por ejercicio. Objetivo: reactivar patrón sin agujetas brutales.'},
+  {w:2, fase:'REENTRADA', color:'var(--blue)', desc:'Series completas otra vez. Pesos normales, deja 1-2 reps de margen. Al final de esta semana deberías estar como antes del parón.'},
+  {w:3, fase:'PROGRESIÓN', color:'var(--green)', desc:'Doble progresión a tope. Sigue los objetivos de la pestaña Rutina: empuja reps al máximo del rango y sube peso cuando la app lo marque.'},
+  {w:4, fase:'PROGRESIÓN', color:'var(--green)', desc:'Sigue empujando. Vigila el sueño y la proteína (170g) — aquí es donde se construye el cambio.'},
+  {w:5, fase:'PROGRESIÓN', color:'var(--green)', desc:'Mitad del bloque. Hazte fotos de control (misma luz y hora que las del inicio). La báscula media semanal debería bajar ~0,5 kg/semana.'},
+  {w:6, fase:'PROGRESIÓN', color:'var(--green)', desc:'Última semana de empuje fuerte. Si algún ejercicio lleva 3 semanas estancado, la app te marcará descarga en ese ejercicio.'},
+  {w:7, fase:'PICO', color:'var(--gold)', desc:'Busca el tope del rango en los compuestos (banca, sentadilla, hack, peso muerto). Descansos completos de 3-4 min. Es la semana de marcas.'},
+  {w:8, fase:'DESCARGA', color:'var(--red)', desc:'-40% volumen: 2 series por ejercicio, peso un 10-15% menor. Pádel suave. El músculo se construye cuando asimilas, no cuando machacas.'}
+];
+
+function loadPlan() {
+  try { var r = localStorage.getItem(PLAN_KEY); return r ? JSON.parse(r) : null; }
+  catch(e) { return null; }
+}
+function savePlan(p) {
+  try { localStorage.setItem(PLAN_KEY, JSON.stringify(p)); return true; } catch(e) { return false; }
+}
+
+function startPlan() {
+  var d = $('planStartDate').value;
+  if (!d) { showToast('⚠️ Elige fecha de inicio', '#f4a261'); return; }
+  savePlan({ startDate: d });
+  renderPlan();
+  showToast('✅ Plan iniciado');
+}
+
+function renderPlan() {
+  var c = $('planContent'); if (!c) return;
+  var plan = loadPlan();
+  var startCard = $('planStartCard');
+  if (!plan || !plan.startDate) {
+    if (startCard) startCard.style.display = 'block';
+    c.innerHTML = '<div class="card"><div style="font-size:13px;color:var(--muted);line-height:1.7">Elige la fecha de inicio (idealmente un lunes) y pulsa EMPEZAR PLAN.<br><br>El bloque dura 8 semanas: <strong style="color:var(--blue)">2 de reentrada</strong> → <strong style="color:var(--green)">4 de progresión</strong> → <strong style="color:var(--gold)">1 de pico</strong> → <strong style="color:var(--red)">1 de descarga</strong>.</div></div>';
+    return;
+  }
+  if (startCard) startCard.style.display = 'none';
+  var start = new Date(plan.startDate + 'T00:00:00');
+  var now = new Date();
+  var days = Math.floor((now - start) / 86400000);
+  var curWeek = Math.floor(days / 7) + 1;
+  var header = '';
+  if (days < 0) {
+    header = '<div class="coach-card"><div class="coach-title">🗓️ PLAN PROGRAMADO</div><div class="coach-msg">Empieza el <strong>'+formatDate(plan.startDate)+'</strong> (en '+Math.abs(days)+' días).</div></div>';
+    curWeek = 0;
+  } else if (curWeek > 8) {
+    header = '<div class="coach-card"><div class="coach-title">🏁 BLOQUE COMPLETADO</div><div class="coach-msg">Has terminado las 8 semanas. Revisa tu progreso (fotos, peso, marcas) y empieza un bloque nuevo cuando quieras.</div></div><div class="card"><button type="button" class="btn" id="planResetBtn">🔄 EMPEZAR NUEVO BLOQUE</button></div>';
+  } else {
+    var cw = PLAN_WEEKS[curWeek-1];
+    header = '<div class="coach-card"><div class="coach-title">📍 SEMANA '+curWeek+' DE 8 — <span style="color:'+cw.color+'">'+cw.fase+'</span></div><div class="coach-msg">'+cw.desc+'</div></div>';
+  }
+  var rows = PLAN_WEEKS.map(function(pw){
+    var isCur = pw.w === curWeek;
+    var border = isCur ? 'border:1px solid '+pw.color : 'border:1px solid var(--border)';
+    var op = (curWeek > 0 && pw.w < curWeek) ? 'opacity:0.45' : '';
+    return '<div style="background:var(--dark3);'+border+';border-radius:10px;padding:12px 14px;margin-bottom:8px;'+op+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+      '<span style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:1px">SEMANA '+pw.w+'</span>'+
+      '<span style="font-size:11px;font-family:monospace;color:'+pw.color+'">'+pw.fase+(isCur?' · AHORA':'')+'</span></div>'+
+      '<div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">'+pw.desc+'</div></div>';
+  }).join('');
+  c.innerHTML = header + '<div class="card"><div class="card-title">📋 LAS 8 SEMANAS</div>'+rows+
+    '<button type="button" class="btn" id="planResetBtn" style="background:#333;color:var(--muted);font-size:13px;margin-top:6px">REINICIAR PLAN</button></div>';
+  var rb = $('planResetBtn');
+  if (rb) rb.addEventListener('click', function(){
+    if (confirm('¿Reiniciar el plan? Podrás elegir nueva fecha.')) {
+      try { localStorage.removeItem(PLAN_KEY); } catch(e){}
+      if (startCard) startCard.style.display = 'block';
+      renderPlan();
+    }
+  });
+}
+
+// Media de los últimos 7 días de nutrición
+function getWeeklyNutriStats() {
+  var data = loadNutri();
+  var totalK = 0, totalP = 0, daysLogged = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var key = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    var meals = data[key];
+    if (meals && meals.length) {
+      daysLogged++;
+      for (var j=0; j<meals.length; j++) { totalK += meals[j].kcal||0; totalP += meals[j].prot||0; }
+    }
+  }
+  if (!daysLogged) return null;
+  return { avgK: Math.round(totalK/daysLogged), avgP: Math.round(totalP/daysLogged), days: daysLogged };
+}
+
+
 function init() {
   // Botones de pestañas
   document.querySelectorAll('.tab').forEach(function(tab){
@@ -1120,6 +1259,9 @@ function init() {
   var fq = $('foodQty'); if (fq) fq.addEventListener('input', updateFoodPreview);
   var afb = $('addFoodBtn'); if (afb) afb.addEventListener('click', addFood);
   var swb = $('saveWeightBtn'); if (swb) swb.addEventListener('click', saveWeight);
+  // Plan
+  var psb = $('planStartBtn'); if (psb) psb.addEventListener('click', startPlan);
+  var psd = $('planStartDate'); if (psd) { try { psd.valueAsDate = new Date(); } catch(e){} }
   // Fecha por defecto
   try { $('logDate').valueAsDate = new Date(); } catch(e){}
   // Cargar
