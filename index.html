@@ -266,8 +266,10 @@
   </div>
   <div class="card">
     <div class="card-title">📥 IMPORTAR</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:10px;line-height:1.5">⚠️ Importar <strong>reemplaza</strong> todos tus datos. Se hace un backup automático antes, y puedes restaurarlo abajo si algo sale mal.</div>
     <textarea id="importText" placeholder="Pega aquí tu JSON..." style="height:140px;font-size:11px;font-family:monospace;background:var(--dark);color:var(--muted);margin-bottom:10px"></textarea>
     <button type="button" class="btn" id="importBtn">⬆️ IMPORTAR</button>
+    <button type="button" class="btn" id="restoreBackupBtn" style="background:var(--dark4);color:var(--gold);border:1px solid var(--gold);font-size:14px;margin-top:8px">↩️ RESTAURAR ÚLTIMO BACKUP</button>
   </div>
   <div class="card">
     <div class="card-title">📊 ESTADO</div>
@@ -306,6 +308,7 @@ var DAYS = {
   ]},
   '2': {name:'Pierna A', exercises:[
     {id:'activacion_cuad', name:'Activación: ext cuádriceps ligero', baseline:null, series:2, repsMin:15, repsMax:15, rest:'60 s', isActivation:true},
+    {id:'power_clean', name:'Power clean (explosivo)', baseline:55, series:5, repsMin:3, repsMax:3, rest:'2-3 min', alt:'Hang power clean', note:'PÁDEL: potencia de remate. Movimiento rápido, lejos del fallo. Velocidad > peso.'},
     {id:'incline_squat', name:'Incline Squat (máquina)', baseline:80, series:4, repsMin:5, repsMax:6, rest:'3-4 min', alt:'Goblet squat pesada'},
     {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5, rest:'3-4 min'},
     {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Zancadas'},
@@ -323,6 +326,7 @@ var DAYS = {
   ]},
   '4': {name:'Pierna B', exercises:[
     {id:'activacion_fem', name:'Activación: curl femoral ligero', baseline:null, series:2, repsMin:12, repsMax:12, rest:'60 s', isActivation:true},
+    {id:'kb_swing', name:'Kettlebell swing ruso', baseline:24, series:4, repsMin:12, repsMax:15, rest:'90 s', note:'PÁDEL: potencia de cadera y frenada. Latigazo explosivo, altura del pecho.'},
     {id:'sentadilla_libre', name:'Sentadilla libre', baseline:60, series:4, repsMin:6, repsMax:8, rest:'3-4 min', alt:'Hack squat / Goblet'},
     {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8, rest:'2-3 min'},
     {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Step-ups'},
@@ -337,7 +341,8 @@ var WEIGHT_JUMPS = {
   aductor:2.5, abduccion:2.5, dead_bug:0, remo_polea:2.5, jalon_abierto:2.5,
   press_declinado:2.5, ext_triceps:2.5, face_pull:2.5, pallof:2.5,
   sentadilla_libre:2.5, rdl:2.5, prensa_d4:5, ext_cuadriceps:2.5, curl_femoral:2.5,
-  activacion_cuad:0, activacion_fem:0
+  activacion_cuad:0, activacion_fem:0,
+  power_clean:2.5, kb_swing:4
 };
 
 var DAY_LABELS = {'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
@@ -562,6 +567,7 @@ function renderRoutine() {
         ? '<span style="font-weight:500;color:#aaa;font-style:italic">'+ex.name+'</span>'
         : '<span style="font-weight:500">'+ex.name+'</span>';
       if (ex.alt) nameCell += '<div style="font-size:10px;color:var(--blue);margin-top:2px">🔄 Alt: '+ex.alt+'</div>';
+      if (ex.note) nameCell += '<div style="font-size:10px;color:var(--gold);margin-top:2px">🎾 '+ex.note+'</div>';
       rowsHtml += '<tr><td>'+nameCell+'</td>'+
                   '<td style="text-align:center">'+ex.series+'</td>'+
                   '<td style="text-align:center">'+range+'</td>'+
@@ -663,7 +669,7 @@ function renderProgress() {
     var dif = pb - ex.baseline;
     return '<tr><td>'+ex.name+'</td><td style="font-family:monospace;color:var(--muted)">'+ex.baseline+'kg</td><td style="font-family:monospace;color:var(--blue);font-weight:600">'+pb+'kg</td><td>'+(dif>0?'<span class="arrow-up">▲ +'+dif+'kg</span>':'<span class="arrow-same">— base</span>')+'</td></tr>';
   }).join('');
-  c.innerHTML = '<div class="progress-grid"><div class="stat-card"><div class="stat-label">Sesiones</div><div class="stat-value">'+sessions.length+'</div><div class="stat-sub">totales</div></div><div class="stat-card"><div class="stat-label">Última</div><div class="stat-value" style="font-size:22px">'+(ls?formatDate(ls.date):'—')+'</div><div class="stat-sub">'+(ls?'Día '+ls.day+' — '+ls.dayName:'—')+'</div></div></div><div class="card"><div class="card-title">🏆 RÉCORDS</div><table class="prog-table"><tr><th>Ejercicio</th><th>Base</th><th>Mejor</th><th>Mejora</th></tr>'+rows+'</table></div>';
+  c.innerHTML = '<div class="progress-grid"><div class="stat-card"><div class="stat-label">Sesiones</div><div class="stat-value">'+sessions.length+'</div><div class="stat-sub">totales</div></div><div class="stat-card"><div class="stat-label">Última</div><div class="stat-value" style="font-size:22px">'+(ls?formatDate(ls.date):'—')+'</div><div class="stat-sub">'+(ls?'Día '+ls.day+' — '+ls.dayName:'—')+'</div></div></div><div class="card"><div class="card-title">🏆 RÉCORDS</div><table class="prog-table"><tr><th>Ejercicio</th><th>Base</th><th>Mejor</th><th>Mejora</th></tr>'+rows+'</table></div>' + '<div class="section-header" style="margin-top:10px"><div class="section-title" style="font-size:20px">📈 EVOLUCIÓN</div></div>' + renderCharts();
 }
 
 // ==================== RENDER: HISTORIAL ====================
@@ -722,6 +728,82 @@ function renderCoach() {
   c.innerHTML = html;
 }
 
+
+// ==================== GRÁFICAS (SVG puro) ====================
+function getExerciseSeries(exId) {
+  // Devuelve [{date, weight}] en orden cronológico ascendente (peso máx de la sesión)
+  var pts = [];
+  for (var i = sessions.length - 1; i >= 0; i--) {
+    var s = sessions[i];
+    if (!s.exercises) continue;
+    for (var k = 0; k < s.exercises.length; k++) {
+      if (s.exercises[k].id === exId && s.exercises[k].weight != null) {
+        pts.push({ date: s.date, weight: s.exercises[k].weight });
+        break;
+      }
+    }
+  }
+  return pts;
+}
+
+function sparkline(pts, color, w, h) {
+  w = w || 300; h = h || 90;
+  if (!pts.length) return '<div style="color:var(--muted);font-size:12px;padding:10px">Sin datos aún.</div>';
+  if (pts.length === 1) {
+    return '<div style="color:var(--blue);font-family:monospace;font-size:13px;padding:6px">1 registro: '+pts[0].weight+'kg</div>';
+  }
+  var pad = 6;
+  var ws = pts.map(function(p){ return p.weight; });
+  var min = Math.min.apply(null, ws);
+  var max = Math.max.apply(null, ws);
+  if (max === min) { max = min + 1; }
+  var n = pts.length;
+  var coords = pts.map(function(p, i){
+    var x = pad + (w - 2*pad) * (i / (n - 1));
+    var y = h - pad - (h - 2*pad) * ((p.weight - min) / (max - min));
+    return { x: x, y: y, wt: p.weight };
+  });
+  var path = coords.map(function(c, i){ return (i===0?'M':'L') + c.x.toFixed(1) + ',' + c.y.toFixed(1); }).join(' ');
+  var area = 'M'+coords[0].x.toFixed(1)+','+(h-pad)+' ' +
+             coords.map(function(c){ return 'L'+c.x.toFixed(1)+','+c.y.toFixed(1); }).join(' ') +
+             ' L'+coords[n-1].x.toFixed(1)+','+(h-pad)+' Z';
+  var dots = coords.map(function(c){
+    return '<circle cx="'+c.x.toFixed(1)+'" cy="'+c.y.toFixed(1)+'" r="2.5" fill="'+color+'"/>';
+  }).join('');
+  var first = ws[0], lastv = ws[n-1];
+  var diff = lastv - first;
+  var diffLabel = (diff>0?'+':'') + diff + 'kg';
+  var diffColor = diff>0 ? 'var(--green)' : (diff<0 ? 'var(--red)' : 'var(--muted)');
+  return '<svg viewBox="0 0 '+w+' '+h+'" style="width:100%;height:'+h+'px;display:block">'+
+    '<defs><linearGradient id="g_'+color.replace(/[^a-z0-9]/gi,'')+'" x1="0" y1="0" x2="0" y2="1">'+
+    '<stop offset="0%" stop-color="'+color+'" stop-opacity="0.25"/>'+
+    '<stop offset="100%" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs>'+
+    '<path d="'+area+'" fill="url(#g_'+color.replace(/[^a-z0-9]/gi,'')+')"/>'+
+    '<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'+
+    dots+
+    '</svg>'+
+    '<div style="display:flex;justify-content:space-between;font-size:11px;font-family:monospace;color:var(--muted);margin-top:2px">'+
+    '<span>'+min+'–'+max+'kg</span><span style="color:'+diffColor+'">'+diffLabel+' · '+n+' sesiones</span></div>';
+}
+
+function renderCharts() {
+  var seen = {};
+  var kx = [];
+  Object.keys(DAYS).forEach(function(dn){
+    DAYS[dn].exercises.forEach(function(ex){
+      if (ex.baseline !== null && !seen[ex.id]) { seen[ex.id] = true; kx.push(ex); }
+    });
+  });
+  var COLORS = ['#4cc9f0','#52b788','#f4a261','#e63946','#b892ff','#4dd0e1'];
+  var cards = kx.map(function(ex, i){
+    var pts = getExerciseSeries(ex.id);
+    if (pts.length < 1) return '';
+    var color = COLORS[i % COLORS.length];
+    return '<div class="card"><div class="card-title" style="font-size:16px">'+ex.name+'</div>'+sparkline(pts, color)+'</div>';
+  }).filter(Boolean).join('');
+  return cards || '<div class="empty-state">Registra sesiones para ver tus gráficas.</div>';
+}
+
 // ==================== BACKUP ====================
 function exportData() {
   var box = $('exportBox');
@@ -749,21 +831,76 @@ function copyExportText() {
   } catch(e) { showToast('❌ No se pudo copiar', '#e63946'); }
 }
 
+var BACKUP_KEY = 'oscar_backup_auto';
+
+function makeAutoBackup() {
+  // Guarda una copia de TODO el estado actual antes de sobrescribir
+  try {
+    var snapshot = {
+      ts: Date.now(),
+      sessions: sessions,
+      nutrition: loadNutri(),
+      weights: loadWeights(),
+      plan: loadPlan()
+    };
+    localStorage.setItem(BACKUP_KEY, JSON.stringify(snapshot));
+    return true;
+  } catch(e) { return false; }
+}
+
+function restoreAutoBackup() {
+  try {
+    var raw = localStorage.getItem(BACKUP_KEY);
+    if (!raw) { showToast('⚠️ No hay backup automático', '#f4a261'); return; }
+    var b = JSON.parse(raw);
+    if (!confirm('¿Restaurar el backup automático anterior?\nSe guardó el '+new Date(b.ts).toLocaleString()+' con '+(b.sessions||[]).length+' sesiones.\nEsto reemplazará el estado actual.')) return;
+    if (Array.isArray(b.sessions)) sessions = b.sessions;
+    if (b.nutrition) saveNutri(b.nutrition);
+    if (Array.isArray(b.weights)) saveWeights(b.weights);
+    if (b.plan) savePlan(b.plan);
+    sessions.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+    saveToStorage();
+    updateHeader(); renderRoutine(); renderStorageStatus();
+    showToast('✅ Backup restaurado — '+sessions.length+' sesiones');
+  } catch(e) { showToast('❌ Error al restaurar: '+e.message, '#e63946'); }
+}
+
 function importFromText() {
   var raw = $('importText').value.trim();
   if (!raw) { showToast('⚠️ Pega el JSON primero', '#f4a261'); return; }
+  var p;
+  try { p = JSON.parse(raw); }
+  catch(e) { showToast('❌ JSON inválido: '+e.message, '#e63946'); return; }
+
+  // Contar qué va a entrar para avisar antes de sobrescribir
+  var incoming = 0;
+  if (Array.isArray(p)) incoming = p.length;
+  else if (p && Array.isArray(p.sessions)) incoming = p.sessions.length;
+
+  var current = sessions.length;
+  // Aviso claro: el import REEMPLAZA. Confirmación obligatoria.
+  var warn = '⚠️ IMPORTAR REEMPLAZA TUS DATOS\n\n' +
+             'Ahora mismo tienes: ' + current + ' sesiones\n' +
+             'El archivo trae: ' + incoming + ' sesiones\n\n';
+  if (incoming < current) {
+    warn += '🚨 ATENCIÓN: el archivo tiene MENOS sesiones que ahora. Si continúas, perderás ' + (current - incoming) + '.\n\n';
+  }
+  warn += 'Se hará un backup automático antes. ¿Continuar?';
+  if (!confirm(warn)) { showToast('Importación cancelada', '#f4a261'); return; }
+
+  // Backup automático ANTES de tocar nada
+  makeAutoBackup();
+
   try {
-    var p = JSON.parse(raw);
     var msg = [];
     if (Array.isArray(p)) {
-      // Formato antiguo: solo sesiones
       sessions = p;
     } else if (p && typeof p === 'object') {
       if (Array.isArray(p.sessions)) { sessions = p.sessions; }
       if (p.nutrition && typeof p.nutrition === 'object') { saveNutri(p.nutrition); msg.push('nutrición'); }
       if (Array.isArray(p.weights)) { saveWeights(p.weights); msg.push('pesos'); }
       if (p.plan && p.plan.startDate) { savePlan(p.plan); msg.push('plan'); }
-      if (!Array.isArray(p.sessions) && !msg.length) throw new Error('Formato inválido');
+      if (!Array.isArray(p.sessions) && !msg.length) throw new Error('Formato inválido: falta la clave "sessions"');
     } else {
       throw new Error('Formato inválido');
     }
@@ -777,7 +914,7 @@ function importFromText() {
       showToast('✅ '+sessions.length+' sesiones importadas'+extra);
     }
   } catch(e) {
-    showToast('❌ Error: '+e.message, '#e63946');
+    showToast('❌ Error: '+e.message+' — usa "Restaurar backup"', '#e63946');
   }
 }
 
@@ -1253,6 +1390,7 @@ function init() {
   $('exportBtn').addEventListener('click', exportData);
   $('copyExportBtn').addEventListener('click', copyExportText);
   $('importBtn').addEventListener('click', importFromText);
+  var rbb = $('restoreBackupBtn'); if (rbb) rbb.addEventListener('click', restoreAutoBackup);
   $('clearBtn').addEventListener('click', clearAllData);
   // Nutrición
   var fsi = $('foodSearch'); if (fsi) fsi.addEventListener('input', function(){ renderFoodResults(fsi.value); });
