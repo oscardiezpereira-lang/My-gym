@@ -309,12 +309,13 @@ var DAYS = {
   '2': {name:'Pierna A', exercises:[
     {id:'activacion_cuad', name:'Activación: ext cuádriceps ligero', baseline:null, series:2, repsMin:15, repsMax:15, rest:'60 s', isActivation:true},
     {id:'power_clean', name:'Power clean (explosivo)', baseline:55, series:5, repsMin:3, repsMax:3, rest:'2-3 min', alt:'Hang power clean', note:'PÁDEL: potencia de remate. Movimiento rápido, lejos del fallo. Velocidad > peso.'},
-    {id:'incline_squat', name:'Incline Squat (máquina)', baseline:80, series:4, repsMin:5, repsMax:6, rest:'3-4 min', alt:'Goblet squat pesada'},
+    {id:'jump_squat', name:'Sentadilla con salto', baseline:50, series:4, repsMin:3, repsMax:5, rest:'2-3 min', alt:'Sentadilla con salto sin peso', note:'PÁDEL: potencia explosiva. Salto rápido, aterriza suave amortiguando. Lejos del fallo — si el salto se vuelve lento, para.'},
     {id:'peso_muerto', name:'Peso muerto convencional', baseline:80, series:4, repsMin:4, repsMax:5, rest:'3-4 min'},
     {id:'prensa', name:'Prensa inclinada', baseline:140, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Zancadas'},
     {id:'aductor', name:'Aductor máquina', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
     {id:'abduccion', name:'Abducción cadera', baseline:null, series:3, repsMin:12, repsMax:15, rest:'60 s'},
-    {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10, rest:'45 s'}
+    {id:'dead_bug', name:'Dead Bug', baseline:null, series:3, repsMin:8, repsMax:10, rest:'45 s'},
+    {id:'farmer_carry', name:'Farmer carry (peso × metros)', baseline:22.5, series:3, repsMin:20, repsMax:40, rest:'90 s', note:'PÁDEL: agarre + estabilización. Peso por mano × metros (mete los metros en la casilla de reps).'}
   ]},
   '3': {name:'Torso B', exercises:[
     {id:'remo_polea', name:'Remo polea baja', baseline:70, series:3, repsMin:8, repsMax:10, rest:'2-3 min'},
@@ -331,7 +332,8 @@ var DAYS = {
     {id:'rdl', name:'Peso muerto rumano', baseline:80, series:3, repsMin:6, repsMax:8, rest:'2-3 min'},
     {id:'prensa_d4', name:'Prensa inclinada', baseline:110, series:3, repsMin:8, repsMax:10, rest:'2-3 min', alt:'Goblet squat / Step-ups'},
     {id:'curl_femoral', name:'Curl femoral unilateral', baseline:20, series:3, repsMin:8, repsMax:10, rest:'90 s'},
-    {id:'ext_cuadriceps', name:'Leg extension unilateral', baseline:30, series:3, repsMin:10, repsMax:12, rest:'90 s'}
+    {id:'ext_cuadriceps', name:'Leg extension unilateral', baseline:30, series:3, repsMin:10, repsMax:12, rest:'90 s'},
+    {id:'farmer_carry', name:'Farmer carry (peso × metros)', baseline:22.5, series:3, repsMin:20, repsMax:40, rest:'90 s', note:'PÁDEL: agarre + estabilización. Peso por mano × metros (mete los metros en la casilla de reps).'}
   ]}
 };
 
@@ -342,7 +344,7 @@ var WEIGHT_JUMPS = {
   press_declinado:2.5, ext_triceps:2.5, face_pull:2.5, pallof:2.5,
   sentadilla_libre:2.5, rdl:2.5, prensa_d4:5, ext_cuadriceps:2.5, curl_femoral:2.5,
   activacion_cuad:0, activacion_fem:0,
-  power_clean:2.5, kb_swing:4
+  power_clean:2.5, kb_swing:4, jump_squat:2.5, farmer_carry:2.5
 };
 
 var DAY_LABELS = {'1':'TORSO A','2':'PIERNA A','3':'TORSO B','4':'PIERNA B'};
